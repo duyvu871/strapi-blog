@@ -17,7 +17,7 @@ const articleService = new ArticleService();
 
 // Sử dụng Morgan middleware để ghi log HTTP requests
 app.use(morgan('dev'));
-app.use(helmet());
+// app.use(helmet());
 
 // Cấu hình Handlebars
 app.engine('handlebars', engine({
