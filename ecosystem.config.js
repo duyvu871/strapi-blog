@@ -12,6 +12,7 @@ module.exports = {
             },
             env_production: {
                 NODE_ENV: 'production',
+                BASE_HOST: 'https://cms.regisna.site',
                 PORT: 5000
             },
         },
