@@ -6,7 +6,7 @@ import { helpers } from './helpers/index.ts';
 import { mockSwiper } from './mock/series.ts';
 import { CategoryService } from './services/graphql/category.service.ts';
 import { ArticleService } from './services/graphql/article.service.ts';
-
+import helmet from 'helmet';
 
 // Khởi tạo Express app
 const app = express();
@@ -17,6 +17,7 @@ const articleService = new ArticleService();
 
 // Sử dụng Morgan middleware để ghi log HTTP requests
 app.use(morgan('dev'));
+app.use(helmet());
 
 // Cấu hình Handlebars
 app.engine('handlebars', engine({
