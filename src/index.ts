@@ -2,10 +2,10 @@ import express from 'express';
 import { engine } from 'express-handlebars';
 import path from 'path';
 import morgan from 'morgan';
-import { helpers } from './helpers/index.ts';
-import { mockSwiper } from './mock/series.ts';
-import { CategoryService } from './services/graphql/category.service.ts';
-import { ArticleService } from './services/graphql/article.service.ts';
+import { helpers } from './helpers';
+import { mockSwiper } from './mock/series';
+import { CategoryService } from './services/graphql/category.service';
+import { ArticleService } from './services/graphql/article.service';
 import helmet from 'helmet';
 
 // Khởi tạo Express app
@@ -22,17 +22,17 @@ app.use(helmet());
 // Cấu hình Handlebars
 app.engine('handlebars', engine({
     defaultLayout: 'main',
-    layoutsDir: path.join(__dirname, 'views/layouts'),
-    partialsDir: path.join(__dirname, 'views/partials'),
+    layoutsDir: path.join(process.cwd(), 'src/views/layouts'),
+    partialsDir: path.join(process.cwd(), 'src/views/partials'),
     helpers: helpers
 }));
 
 app.set('view engine', 'handlebars');
-app.set('views', path.join(__dirname, 'views'));
+app.set('views', path.join(process.cwd(), 'src/views'));
 
 // Cấu hình static files
-app.use('/script', express.static(path.join(__dirname, 'views/scripts')));
-app.use('/style', express.static(path.join(__dirname, 'views/styles')));
+app.use('/script', express.static(path.join(process.cwd(), 'src/views/scripts')));
+app.use('/style', express.static(path.join(process.cwd(), 'src/views/styles')));
 app.use('/static/fonts', express.static(path.join(process.cwd(), 'public/fonts')));
 app.use('/images', express.static(path.join(process.cwd(), 'public/images')));
 app.use('/assets', express.static(path.join(process.cwd(), 'public/assets')));

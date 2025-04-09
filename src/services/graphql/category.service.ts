@@ -1,6 +1,6 @@
-import { initGraphQLClient } from './graphql-client.ts';
-import { PaginationCateGoriesResponse, QueryCategoriesResponse } from '../../types/category.ts';
-import { STRAPI_BASE_HOST } from '../../constants/app.ts';
+import { initGraphQLClient } from './graphql-client';
+import { PaginationCateGoriesResponse, QueryCategoriesResponse } from '../../types/category';
+import { STRAPI_BASE_HOST } from '../../constants/app';
 
 export class CategoryService {
     private readonly GET_CATEGORIES = `

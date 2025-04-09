@@ -1,7 +1,7 @@
 
-import { initGraphQLClient } from './graphql-client.ts';
-import { ArticlesConnectionResponse, GetRelatedArticlesVariables } from '../../types/article.ts';
-import { STRAPI_BASE_HOST } from '../../constants/app.ts';
+import { initGraphQLClient } from './graphql-client';
+import { ArticlesConnectionResponse, GetRelatedArticlesVariables } from '../../types/article';
+import { STRAPI_BASE_HOST } from '../../constants/app';
 
 export class ArticleService {
     private readonly GET_RELATED_ARTICLES = `
