@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Static Stack Carousel - Hover In Place</title>
+    <!-- Import Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Import jQuery -->
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+    <style>
+        .perspective-container {
+            perspective: 1000px;
+        }
+        .carousel-item {
+            /* Transition chỉ áp dụng cho item được hover */
+            transition: transform 0.35s cubic-bezier(0.25, 0.8, 0.25, 1),
+                        opacity 0.35s ease,
+                        z-index 0s linear 0.1s; /* z-index thay đổi nhanh khi hover */
+            transform-style: preserve-3d;
+             will-change: transform, opacity, z-index; /* Tối ưu */
+        }
+        /* Style cho item đang active (hover) */
+        .carousel-item.item-is-active {
+             /* z-index thay đổi ngay khi bắt đầu hover */
+            transition: transform 0.35s cubic-bezier(0.25, 0.8, 0.25, 1),
+                        opacity 0.35s ease,
+                        z-index 0s linear 0s;
+        }
+    </style>
+</head>
+<body class="bg-gray-100 flex items-center justify-center min-h-screen overflow-hidden">
+
+    <div class="perspective-container w-full max-w-4xl px-4">
+        <!-- Container chính -->
+        <div
+            id="carousel-container"
+            class="stacking-carousel flex justify-center items-center h-96 relative"
+            >
+            <!-- Các Item trong Carousel -->
+            <!-- Style inline định nghĩa trạng thái nghỉ CỐ ĐỊNH -->
+            <div
+                class="carousel-item absolute w-48 h-72 rounded-lg shadow-lg overflow-hidden cursor-pointer bg-gray-400"
+                style="transform: translateX(-100%) scale(0.7); opacity: 0.6; z-index: 1;"
+                data-index="0">
+                <img src="https://via.placeholder.com/300x400/777777/FFFFFF?text=Item+1" alt="Item 1" class="w-full h-full object-cover">
+            </div>
+            <div
+                class="carousel-item absolute w-48 h-72 rounded-lg shadow-lg overflow-hidden cursor-pointer bg-gray-500"
+                style="transform: translateX(-50%) scale(0.85); opacity: 0.8; z-index: 2;"
+                data-index="1">
+                 <img src="https://via.placeholder.com/300x400/d2a679/FFFFFF?text=Item+2" alt="Item 2" class="w-full h-full object-cover">
+            </div>
+            <div
+                class="carousel-item absolute w-48 h-72 rounded-lg shadow-lg overflow-hidden cursor-pointer bg-gray-600"
+                style="transform: translateX(0%) scale(1); opacity: 1; z-index: 3;"
+                data-index="2">
+                 <img src="https://via.placeholder.com/300x400/b71c1c/FFFFFF?text=Item+3" alt="Item 3" class="w-full h-full object-cover">
+            </div>
+            <div
+                class="carousel-item absolute w-48 h-72 rounded-lg shadow-lg overflow-hidden cursor-pointer bg-gray-500"
+                style="transform: translateX(50%) scale(0.85); opacity: 0.8; z-index: 2;"
+                data-index="3">
+                 <img src="https://via.placeholder.com/300x400/2e7d32/FFFFFF?text=Item+4" alt="Item 4" class="w-full h-full object-cover">
+            </div>
+            <div
+                class="carousel-item absolute w-48 h-72 rounded-lg shadow-lg overflow-hidden cursor-pointer bg-gray-400"
+                style="transform: translateX(100%) scale(0.7); opacity: 0.6; z-index: 1;"
+                data-index="4">
+                 <img src="https://via.placeholder.com/300x400/e65100/FFFFFF?text=Item+5" alt="Item 5" class="w-full h-full object-cover">
+            </div>
+        </div>
+    </div>
+
+    <script>
+        $(document).ready(function() {
+            const $carouselContainer = $('#carousel-container');
+            const $items = $carouselContainer.find('.carousel-item');
+            const itemCount = $items.length;
+            const maxZIndexActive = itemCount + 1; // z-index cao nhất cho item active
+
+            // Lưu trữ trạng thái CSS gốc của mỗi item
+            $items.each(function() {
+                const $item = $(this);
+                // Lưu trực tiếp vào data của element
+                $item.data('initial-style', {
+                    transform: $item.css('transform'), // Lấy giá trị transform hiện tại
+                    opacity: $item.css('opacity'),     // Lấy giá trị opacity hiện tại
+                    zIndex: $item.css('z-index')       // Lấy giá trị z-index hiện tại
+                });
+                 // Lưu transform gốc riêng để dễ truy cập
+                $item.data('initial-transform', $item.css('transform'));
+            });
+
+            let $activeItem = null; // Lưu trữ jQuery object của item đang active
+
+            $items.on('mouseenter', function() {
+                const $currentItem = $(this);
+
+                // 1. Reset item đang active trước đó (nếu có và khác item hiện tại)
+                if ($activeItem && !$activeItem.is($currentItem)) {
+                    const initialStyle = $activeItem.data('initial-style');
+                    if (initialStyle) {
+                         // Khôi phục style gốc
+                        $activeItem.css({
+                            'transform': initialStyle.transform,
+                            'opacity': initialStyle.opacity,
+                            'z-index': initialStyle.zIndex
+                        }).removeClass('item-is-active');
+                    }
+                }
+
+                // 2. Áp dụng style active cho item hiện tại
+                $activeItem = $currentItem; // Cập nhật item active mới
+                const initialTransform = $currentItem.data('initial-transform'); // Lấy transform gốc đã lưu
+                const activeScale = 1.1; // Mức độ scale khi active
+                const activeYOffset = -15; // Nhấc lên bao nhiêu px
+
+                // Phân tích transform gốc để giữ nguyên các phần khác (ví dụ translateX)
+                // Cách đơn giản nhất là giả định transform gốc chỉ có translateX và scale
+                // Nếu phức tạp hơn (có rotate), cần phân tích kỹ hơn hoặc chỉ append/prepend
+                let newTransform = initialTransform; // Bắt đầu từ transform gốc
+
+                // Cố gắng thay thế hoặc thêm scale và translateY
+                // Regex để tìm scale hiện có (nếu có)
+                const scaleRegex = /scale\([^)]+\)/;
+                if (scaleRegex.test(newTransform)) {
+                    newTransform = newTransform.replace(scaleRegex, `scale(${activeScale})`);
+                } else {
+                    newTransform += ` scale(${activeScale})`; // Thêm nếu chưa có
+                }
+
+                 // Regex để tìm translateY hiện có (nếu có)
+                const translateYRegex = /translateY\([^)]+\)/;
+                 if (translateYRegex.test(newTransform)) {
+                     newTransform = newTransform.replace(translateYRegex, `translateY(${activeYOffset}px)`);
+                 } else {
+                    // Thêm vào sau cùng hoặc vị trí hợp lý
+                    newTransform += ` translateY(${activeYOffset}px)`;
+                 }
+
+                $currentItem.css({
+                    'transform': newTransform,
+                    'opacity': 1, // Luôn rõ nhất
+                    'z-index': maxZIndexActive // Luôn trên cùng
+                }).addClass('item-is-active');
+
+                // --- QUAN TRỌNG: Không thay đổi style của các item khác ---
+
+            });
+
+            $carouselContainer.on('mouseleave', function() {
+                // Reset item đang active về trạng thái gốc
+                if ($activeItem) {
+                    const initialStyle = $activeItem.data('initial-style');
+                    if (initialStyle) {
+                        $activeItem.css({
+                            'transform': initialStyle.transform,
+                            'opacity': initialStyle.opacity,
+                            'z-index': initialStyle.zIndex
+                        }).removeClass('item-is-active');
+                    }
+                    $activeItem = null; // Reset biến active
+                }
+            });
+
+             // Đảm bảo style ban đầu được áp dụng đúng khi tải trang
+             $items.each(function() {
+                 const $item = $(this);
+                 const initialState = $item.data('initial-state');
+                 if (initialState) {
+                     $item.css({
+                         'transform': initialState.transform,
+                         'opacity': initialState.opacity,
+                         'z-index': initialState.zIndex
+                     });
+                 }
+             });
+        });
+    </script>
+
+</body>
+</html>

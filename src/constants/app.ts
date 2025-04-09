@@ -1,0 +1,1 @@
+export const STRAPI_BASE_HOST = 'http://localhost:1337'

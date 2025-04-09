@@ -1,0 +1,26 @@
+<nav class="bg-background" x-data="{ isOpen: false }">
+    <div class="container mx-auto px-4">
+        <!-- Mobile menu button -->
+        <div class="flex md:hidden justify-end py-4">
+            <button @click="isOpen = !isOpen" type="button" class="text-gray-500 hover:text-gray-600" aria-label="Toggle menu">
+                <svg class="h-6 w-6" x-show="!isOpen" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
+                </svg>
+                <svg class="h-6 w-6" x-show="isOpen" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                </svg>
+            </button>
+        </div>
+
+        <!-- Desktop/Mobile menu -->
+        <ul class="hidden md:flex flex-col md:flex-row md:justify-center md:space-x-8 md:space-y-0 space-y-4 py-4 text-base md:text-[24px] leading-[24px] typo-title-font italic font-normal" 
+            :class="{'!flex': isOpen}" 
+            id="main-nav">
+            <li><a href="/" class="nav-item block text-gray-700 hover:text-black hover:underline hover:decoration-yellow-400 transition-colors {{#if (eq currentPath '/')}}nav-active underline decoration-yellow-400{{/if}}" data-path="/">Khám phá</a></li>
+            <li><a href="/viegazine" class="nav-item block text-gray-700 hover:text-black hover:underline hover:decoration-yellow-400 transition-colors {{#if (eq currentPath '/viegazine')}}nav-active underline decoration-yellow-400{{/if}}" data-path="/viegazine">Viegazine</a></li>
+            <li><a href="/comic" class="nav-item block text-gray-700 hover:text-black hover:underline hover:decoration-yellow-400 transition-colors {{#if (eq currentPath '/comic')}}nav-active underline decoration-yellow-400{{/if}}" data-path="/comic">Comic</a></li>
+            <li><a href="/video" class="nav-item block text-gray-700 hover:text-black hover:underline hover:decoration-yellow-400 transition-colors {{#if (eq currentPath '/video')}}nav-active underline decoration-yellow-400{{/if}}" data-path="/video">Video</a></li>
+            <li><a href="/podcast" class="nav-item block text-gray-700 hover:text-black hover:underline hover:decoration-yellow-400 transition-colors {{#if (eq currentPath '/podcast')}}nav-active underline decoration-yellow-400{{/if}}" data-path="/podcast">Podcast</a></li>
+        </ul>
+    </div>
+</nav>

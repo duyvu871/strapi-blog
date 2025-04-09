@@ -1,0 +1,62 @@
+{{!--
+Component Button - Các loại nút với nhiều biến thể
+Sử dụng: {{> components/button/button variant="primary" text="Nút" onClick="console.log('Clicked')"
+class="my-custom-class"}}
+Các variant: primary, secondary, outline, danger, success, link
+--}}
+
+<button {{#if id}}id="{{id}}" {{/if}} type="{{type}}" x-data="{ hover: false }" x-on:mouseenter="hover = true"
+    x-on:mouseleave="hover = false" x-on:click="{{onClick}}" {{#if disabled}}disabled{{/if}} class="
+    inline-flex items-center justify-center px-4 py-2 transition-all duration-200 focus:outline-none focus:ring-0 focus:ring-offset-0
+    {{~#if (eq variant 'primary')}}
+      bg-purple-600 hover:bg-purple-700 text-white focus:ring-purple-600
+    {{~else if (eq variant 'secondary')}}
+      bg-purple-100 hover:bg-purple-200 text-purple-700 focus:ring-purple-600
+    {{~else if (eq variant 'outline')}}
+      bg-transparent hover:bg-purple-50 text-purple-600 border border-purple-600 focus:ring-purple-600
+    {{~else if (eq variant 'danger')}}
+      bg-red-600 hover:bg-red-700 text-white focus:ring-red-500
+    {{~else if (eq variant 'success')}}
+      bg-green-600 hover:bg-green-700 text-white focus:ring-green-500
+    {{~else if (eq variant 'link')}}
+      bg-transparent hover:underline text-purple-600 focus:ring-purple-600 px-0 py-0
+    {{~else}}
+      bg-purple-600 hover:bg-purple-700 text-white focus:ring-purple-600
+    {{/if}}
+    {{~#if disabled}}
+      opacity-50 cursor-not-allowed
+    {{~/if~}}
+    {{~#if size}}
+      {{~#if (eq size 'sm')}}
+        text-sm px-3 py-1
+      {{~else if (eq size 'lg')}}
+        text-lg px-5 py-3
+      {{~/if~}}
+    {{~/if~}}
+    {{~#if (eq radius 'sm')}}
+            rounded-sm
+        {{~else if (eq radius 'md')}}
+            rounded-md
+        {{~else if (eq radius 'lg')}}
+            rounded-lg
+        {{~else if (eq radius 'xl')}}
+            rounded-xl
+        {{~else if (eq radius '2xl')}}
+            rounded-2xl
+        {{~else if (eq radius '3xl')}}
+            rounded-3xl
+        {{~else if (eq radius 'full')}}
+            rounded-full
+        {{~else~}}
+            rounded-md
+        {{~/if~}}
+        {{class}}
+  ">
+    {{~#if icon}}
+    <span class="mr-2">{{{icon}}}</span>
+    {{~/if}}
+    {{text}}
+    {{~#if iconRight}}
+    <span class="ml-2">{{{iconRight}}}</span>
+    {{~/if~}}
+</button>

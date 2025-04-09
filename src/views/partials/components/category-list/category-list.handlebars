@@ -1,0 +1,30 @@
+{{!-- 
+Component Category List - Hiển thị danh sách các danh mục
+Sử dụng: {{> components/category-list/category-list title="Tiêu đề" subtitle="Phụ đề" categories=categories}}
+--}}
+
+<section class="py-20 {{class}}">
+  <div class="container mx-auto px-4">
+    {{!-- {{#if subtitle}}
+      <p class="text-sm md:text-base text-gray-600 text-center mb-2">{{subtitle}}</p>
+    {{/if}} --}}
+    
+    {{#if title}}
+      <h2 class="text-4xl md:text-6xl typo-title-font italic text-purple-600 font-thin text-center mb-16">{{title}}</h2>
+    {{/if}}
+    
+    {{#if categories}}
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+        {{#each categories}}
+          {{> components/category-card/category-card 
+            title=this.title 
+            image=this.thumbnail
+            slug=this.slug
+            description=this.description
+            class="w-full"
+          }}
+        {{/each}}
+      </div>
+    {{/if}}
+  </div>
+</section>

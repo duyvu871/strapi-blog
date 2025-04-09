@@ -1,0 +1,14 @@
+.h-screen-no-bars {
+    height: calc(100vh - 56px);
+}
+
+.h-screen--sub-menu {
+    height: calc(100vh - 66px);
+}
+
+.bg-align-cover {
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+}
+

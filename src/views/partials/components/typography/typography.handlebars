@@ -1,0 +1,29 @@
+{{!-- 
+Component Typography - Định nghĩa các kiểu văn bản
+Sử dụng: {{> components/typography/typography variant="h1" text="Tiêu đề" class="my-custom-class"}}
+Các variant: h1, h2, h3, h4, h5, h6, p, lead, small, link
+--}}
+
+{{#if (eq variant "h1")}}
+  <h1 class="text-4xl font-bold text-gray-900 mb-4 {{class}}">{{text}}</h1>
+{{else if (eq variant "h2")}}
+  <h2 class="text-3xl font-bold text-gray-900 mb-3 {{class}}">{{text}}</h2>
+{{else if (eq variant "h3")}}
+  <h3 class="text-2xl font-bold text-gray-900 mb-3 {{class}}">{{text}}</h3>
+{{else if (eq variant "h4")}}
+  <h4 class="text-xl font-bold text-gray-900 mb-2 {{class}}">{{text}}</h4>
+{{else if (eq variant "h5")}}
+  <h5 class="text-lg font-bold text-gray-900 mb-2 {{class}}">{{text}}</h5>
+{{else if (eq variant "h6")}}
+  <h6 class="text-base font-bold text-gray-900 mb-2 {{class}}">{{text}}</h6>
+{{else if (eq variant "p")}}
+  <p class="text-base text-gray-700 mb-4 {{class}}">{{text}}</p>
+{{else if (eq variant "lead")}}
+  <p class="text-lg text-gray-700 mb-4 {{class}}">{{text}}</p>
+{{else if (eq variant "small")}}
+  <small class="text-sm text-gray-600 {{class}}">{{text}}</small>
+{{else if (eq variant "link")}}
+  <a href="{{href}}" class="text-blue-600 hover:text-blue-800 underline {{class}}">{{text}}</a>
+{{else}}
+  <p class="text-base text-gray-700 {{class}}">{{text}}</p>
+{{/if}}

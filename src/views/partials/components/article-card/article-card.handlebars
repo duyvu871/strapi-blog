@@ -1,0 +1,109 @@
+{{!--
+Component Article Card - Thẻ hiển thị bài viết với hình ảnh, tiêu đề, mô tả và thông tin nguồn
+Sử dụng: {{> components/article-card/article-card
+title="Tiêu đề bài viết"
+excerpt="Mô tả ngắn về bài viết"
+image="/path/to/image.jpg"
+imageAlt="Mô tả hình ảnh"
+category="Danh mục"
+author="Tên tác giả"
+publishDate="Ngày đăng"
+readTime="Thời gian đọc"
+url="/link-to-article"
+class="my-custom-class"
+}}
+--}}
+
+<div x-data="{ hover: false }" x-on:mouseenter="hover = true" x-on:mouseleave="hover = false" class="
+    article-card rounded-lg overflow-hidden bg-white shadow-sm hover:shadow-md transition-all duration-300
+    {{#if (eq variant 'bordered')}}border border-gray-200{{/if}}
+    {{class}}
+    ">
+    {{#if image}}
+    <div class="relative aspect-[16/9] overflow-hidden">
+        <a href="{{url}}" class="block w-full h-full">
+            <img src="{{image}}" alt="{{imageAlt}}" class="w-full h-full object-cover transition-transform duration-500"
+                :class="{ 'scale-105': hover }">
+        </a>
+        {{#if category}}
+        <div class="absolute top-3 left-3">
+            <span class="inline-flex items-center bg-purple-600 text-white text-xs font-medium px-2.5 py-1 rounded">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 7h.01M7 3h5c.512 0 1.024.195 1.414.586l7 7a2 2 0 010 2.828l-7 7a2 2 0 01-2.828 0l-7-7A2 2 0 013 12V7a4 4 0 014-4z" />
+                </svg>
+                {{category}}
+            </span>
+        </div>
+        {{/if}}
+        {{!-- {{#if series}}
+        <div class="absolute top-12 left-3">
+            <span class="inline-flex items-center bg-purple-600 text-white text-xs font-medium px-2.5 py-1 rounded">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10" />
+                </svg>
+                {{series}}
+            </span>
+        </div>
+        {{/if}} --}}
+    </div>
+    {{/if}}
+
+    <div class="p-4">
+        {{#if title}}
+        <h3 class="text-3xl font-light typo-title-font text-gray-900 mb-2 line-clamp-2">
+            <a href="{{url}}" class="hover:text-purple-600 transition-colors duration-200">{{title}}</a>
+        </h3>
+        {{/if}}
+
+        {{#if excerpt}}
+        <p class="text-gray-700 typo-paragraph-font mb-4 line-clamp-3">{{excerpt}}</p>
+        {{/if}}
+
+        <div class="flex items-center text-sm text-gray-500 mt-auto">
+            {{#if author}}
+            <span class="flex items-center">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-1" fill="none" viewBox="0 0 24 24"
+                    stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                        d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+                </svg>
+                {{author}}
+            </span>
+            {{/if}}
+
+            {{#if publishDate}}
+            <span class="flex items-center ml-3">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-1" fill="none" viewBox="0 0 24 24"
+                    stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                        d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                </svg>
+                {{publishDate}}
+            </span>
+            {{/if}}
+
+            {{#if readTime}}
+            <span class="flex items-center ml-3">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-1" fill="none" viewBox="0 0 24 24"
+                    stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                        d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+                </svg>
+                {{readTime}}
+            </span>
+            {{/if}}
+        </div>
+
+        {{#if hasSlot}}
+        <div class="mt-4">
+            {{{slot}}}
+        </div>
+        {{/if}}
+
+        {{#if actions}}
+        <div class="mt-4 flex justify-end space-x-2">
+            {{{actions}}}
+        </div>
+        {{/if}}
+    </div>
+</div>

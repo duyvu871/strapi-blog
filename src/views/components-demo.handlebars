@@ -1,0 +1,205 @@
+<script>
+ 
+</script>
+
+<div class="container mx-auto px-4 py-8">
+    <h1 class="text-3xl font-bold mb-6">Demo Components</h1>
+    
+    <section class="mb-12">
+        <h2 class="text-2xl font-bold mb-4 pb-2 border-b">Typography</h2>
+        <div class="bg-white shadow-md rounded-lg p-6 mb-6">
+            <div class="space-y-4">
+                {{> components/typography/typography variant="h1" text="Heading 1 (H1)" }}
+                {{> components/typography/typography variant="h2" text="Heading 2 (H2)" }}
+                {{> components/typography/typography variant="h3" text="Heading 3 (H3)" }}
+                {{> components/typography/typography variant="h4" text="Heading 4 (H4)" }}
+                {{> components/typography/typography variant="h5" text="Heading 5 (H5)" }}
+                {{> components/typography/typography variant="h6" text="Heading 6 (H6)" }}
+                {{> components/typography/typography variant="p" text="Đây là đoạn văn bản thông thường (p). Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam in dui mauris." }}
+                {{> components/typography/typography variant="lead" text="Đây là đoạn văn bản dẫn đầu (lead). Lorem ipsum dolor sit amet, consectetur adipiscing elit." }}
+                {{> components/typography/typography variant="small" text="Đây là đoạn văn bản nhỏ (small)." }}
+                {{> components/typography/typography variant="link" text="Đây là một liên kết (link)" href="#" }}
+            </div>
+        </div>
+    </section>
+    
+    <section class="mb-12">
+        <h2 class="text-2xl font-bold mb-4 pb-2 border-b">Buttons</h2>
+        <div class="bg-white shadow-md rounded-lg p-6 mb-6">
+            <div class="space-y-6">
+                <div>
+                    <h3 class="text-lg font-semibold mb-3">Button Variants</h3>
+                    <div class="flex flex-wrap gap-4">
+                        {{> components/button/button variant="primary" text="Primary Button" onClick="alert('Primary clicked')" }}
+                        {{> components/button/button variant="secondary" text="Secondary Button" onClick="alert('Secondary clicked')" }}
+                        {{> components/button/button variant="outline" text="Outline Button" onClick="alert('Outline clicked')" }}
+                        {{> components/button/button variant="danger" text="Danger Button" onClick="alert('Danger clicked')" }}
+                        {{> components/button/button variant="success" text="Success Button" onClick="alert('Success clicked')" }}
+                        {{> components/button/button variant="link" text="Link Button" onClick="alert('Link clicked')" }}
+                    </div>
+                </div>
+
+                <div>
+                    <h3 class="text-lg font-semibold mb-3">Button Radius</h3>
+                    <div class="flex flex-wrap gap-4">
+                        {{> components/button/button variant="primary" text="Rounded Small" radius="sm" onClick="alert('Rounded Small clicked')" }}
+                        {{> components/button/button variant="primary" text="Rounded Medium" radius="md" onClick="alert('Rounded Medium clicked')" }}
+                        {{> components/button/button variant="primary" text="Rounded Large" radius="lg" onClick="alert('Rounded Large clicked')" }}
+                        {{> components/button/button variant="primary" text="Rounded Extra Large" radius="xl" onClick="alert('Rounded Extra Large clicked')" }}
+                        {{> components/button/button variant="primary" text="Rounded Full" radius="full" onClick="alert('Rounded Full clicked')" }}
+                    </div>
+                </div>
+                
+                <div>
+                    <h3 class="text-lg font-semibold mb-3">Button Sizes</h3>
+                    <div class="flex flex-wrap gap-4 items-center">
+                        {{> components/button/button variant="primary" text="Small Button" size="sm" onClick="alert('Small clicked')" }}
+                        {{> components/button/button variant="primary" text="Default Button" onClick="alert('Default clicked')" }}
+                        {{> components/button/button variant="primary" text="Large Button" size="lg" onClick="alert('Large clicked')" }}
+                    </div>
+                </div>
+                
+                <div>
+                    <h3 class="text-lg font-semibold mb-3">Button States</h3>
+                    <div class="flex flex-wrap gap-4">
+                        {{> components/button/button variant="primary" text="Normal Button" onClick="alert('Normal clicked')" }}
+                        {{> components/button/button variant="primary" text="Disabled Button" disabled=true onClick="alert('This should not appear')" }}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <section class="mb-12">
+        <h2 class="text-2xl font-bold mb-4 pb-2 border-b">Cards</h2>
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {{> components/card/card 
+                variant="default" 
+                title="Default Card" 
+                content="Đây là card mặc định với nội dung cơ bản."
+            }}
+            
+            {{> components/card/card 
+                variant="bordered" 
+                title="Bordered Card" 
+                content="Card này có viền xung quanh để tạo sự phân biệt."
+            }}
+            
+            {{> components/card/card 
+                variant="shadowed" 
+                title="Shadowed Card" 
+                content="Card này có bóng đổ để tạo hiệu ứng nổi."
+                image="/assets/3_4_le_van_khoi_09b80d903c.jpg"
+                imageAlt="Card image"
+            }}
+            
+            {{> components/card/card 
+                variant="interactive" 
+                title="Interactive Card" 
+                content="Di chuột qua card này để thấy hiệu ứng tương tác."
+                badge="New"
+                footer="<p class=\"text-sm text-gray-500\">Cập nhật: {{formatDate (now)}}</p>"
+            }}
+            
+            {{> components/card/card 
+                variant="shadowed" 
+                title="Card with Actions" 
+                content="Card này có các nút hành động ở phía dưới."
+                actions="{{> components/button/button variant=\"primary\" text=\"Xem thêm\" size=\"sm\" onClick=\"alert('Xem thêm')\" }} {{> components/button/button variant=\"outline\" text=\"Hủy\" size=\"sm\" onClick=\"alert('Hủy')\" }}"
+            }}
+        </div>
+    </section>
+    
+    <section class="mb-12">
+        {{> components/category-list/category-list 
+            title="Chuyện người Việt kể"
+            subtitle="Khám phá các chủ đề hấp dẫn"
+            categories=categories
+        }}
+    </section>
+
+    <section class="mb-12">
+        <h2 class="text-2xl font-bold mb-4 pb-2 border-b">Article Cards</h2>
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {{> components/article-card/article-card 
+                title="Việt Nam kỹ nghệ: Kỹ thuật khảm tam khí" 
+                excerpt="Lịch sử hơn ngàn năm của nền kỹ nghệ Việt Nam đã chứng kiến không ít những kỹ thuật gia công kim khí độc đáo. Trong đó, khảm tam khí là một trong những kỹ thuật chế tác đặc sắc nhất." 
+                image="/assets/3_4_le_van_khoi_09b80d903c.jpg" 
+                imageAlt="Kỹ thuật khảm tam khí Việt Nam"
+                category="Văn hóa"
+                author="Long Tự"
+                publishDate="12/05/2023"
+                readTime="5 phút"
+                url="#"
+            }}
+            
+            {{> components/article-card/article-card 
+                title="Nghề truyền thống: Làng gốm Bát Tràng" 
+                excerpt="Làng gốm Bát Tràng có lịch sử phát triển hơn 700 năm với những sản phẩm gốm sứ tinh xảo mang đậm bản sắc văn hóa Việt Nam." 
+                image="/assets/3_4_le_van_khoi_09b80d903c.jpg"
+                imageAlt="Làng gốm Bát Tràng"
+                category="Di sản"
+                author="Minh Anh"
+                publishDate="10/05/2023"
+                readTime="4 phút"
+                url="#"
+            }}
+            
+            {{> components/article-card/article-card 
+                title="Ẩm thực Việt: Hương vị phở Hà Nội" 
+                excerpt="Phở Hà Nội không chỉ là món ăn mà còn là biểu tượng văn hóa, là linh hồn ẩm thực của người dân Thủ đô." 
+                image="/assets/3_4_le_van_khoi_09b80d903c.jpg" 
+                imageAlt="Phở Hà Nội"
+                category="Ẩm thực"
+                author="Thu Hà"
+                publishDate="08/05/2023"
+                readTime="3 phút"
+                url="#"
+                variant="bordered"
+            }}
+        </div>
+    </section>
+    
+    <section class="mb-12">
+        <h2 class="text-2xl font-bold mb-4 pb-2 border-b">Series Swiper</h2>
+        {{> components/series-swiper/series-swiper 
+            title="Loạt chuyện (Series)"
+            subtitle="Chuỗi những câu chuyện cùng chủ đề"
+            series=series
+        }}
+
+        <h2 class="text-2xl font-bold mb-4 pb-2 border-b mt-12">Kết hợp các Components</h2>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+            {{> components/card/card 
+                variant="shadowed" 
+                title="Bài viết mẫu" 
+                subtitle="Đăng ngày {{formatDate (now)}}"
+                content="Đây là một ví dụ về cách kết hợp các component Typography, Button và Card để tạo một giao diện hoàn chỉnh."
+                image="/assets/3_4_le_van_khoi_09b80d903c.jpg"
+                imageAlt="Ảnh bài viết"
+                actions="{{> components/button/button variant=\"primary\" text=\"Đọc thêm\" size=\"sm\" onClick=\"alert('Đọc thêm')\" }} {{> components/button/button variant=\"outline\" text=\"Lưu\" size=\"sm\" onClick=\"alert('Lưu')\" }}"
+            }}
+            
+            <div class="bg-white shadow-md rounded-lg overflow-hidden">
+                <div class="p-6">
+                    {{> components/typography/typography variant="h3" text="Form đăng ký" }}
+                    {{> components/typography/typography variant="p" text="Điền thông tin của bạn vào form dưới đây để đăng ký nhận bản tin." }}
+                    
+                    <div class="mt-4 space-y-4">
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-1">Họ tên</label>
+                            <input type="text" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-1">Email</label>
+                            <input type="email" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
+                        </div>
+                        <div class="pt-2">
+                            {{> components/button/button variant="primary" text="Đăng ký" onClick="alert('Form submitted')" }}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+</div>

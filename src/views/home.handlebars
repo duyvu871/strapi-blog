@@ -1,0 +1,32 @@
+{{!--
+<script src="/script/nav.js"></script> --}}
+{{> components/related-post/related-post
+    image=relatedArticle.thumbnail.url
+    title=relatedArticle.title
+    slug=relatedArticle.slug
+}}
+{{> nav/nav}}
+
+<section class="mb-12">
+    {{> components/category-list/category-list
+        title="Chuyện người Việt kể"
+        subtitle="Khám phá các chủ đề hấp dẫn"
+        categories=categories
+    }}
+</section>
+
+<div class="container mx-auto px-4">
+    <h1 class="text-3xl font-bold mb-6">Chào mừng đến với Vietales</h1>
+
+    <div class="bg-white shadow-md rounded-lg p-6 mb-6">
+        <h2 class="text-xl font-semibold mb-4">Giới thiệu</h2>
+        <p class="mb-4">Đây là trang web được xây dựng với Express, TypeScript, và Handlebars.</p>
+        <p>Dự án này sử dụng:</p>
+        <ul class="list-disc pl-6 mt-2">
+            <li>TypeScript cho type-safe JavaScript</li>
+            <li>Express làm web framework</li>
+            <li>Handlebars làm template engine</li>
+            <li>tsup để build TypeScript code</li>
+        </ul>
+    </div>
+</div>

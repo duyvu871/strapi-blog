@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="vi">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="{{meta.description}}">
+    <meta name="keywords" content="{{meta.keywords}}">
+    <meta property="og:title" content="{{meta.ogTitle}}">
+    <meta property="og:description" content="{{meta.ogDescription}}">
+    <meta property="og:image" content="{{meta.ogImage}}">
+    <meta property="og:url" content="{{meta.ogUrl}}">
+    <meta name="twitter:card" content="summary_large_image">
+    <title>{{title}} | Vietales</title>
+    <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-EPLTRJB2W8"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag() { dataLayer.push(arguments); }
+        gtag('js', new Date());
+
+        gtag('config', 'G-EPLTRJB2W8');
+    </script>
+
+    <!-- Tailwind CSS từ CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <!-- Alpine.js từ CDN -->
+    <script defer src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js"></script>
+    <!-- jQuery từ CDN -->
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"
+        integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
+    <!-- Lenis từ CDN -->
+    <script src="https://cdn.jsdelivr.net/gh/studio-freight/lenis@1.0.27/bundled/lenis.min.js"></script>
+    <!-- GSAP từ CDN -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
+    <!-- Swiper.js từ CDN -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@10/swiper-bundle.min.css" />
+    <!-- Các CSS tùy chỉnh -->
+    {{#each cssFiles}}
+    <link href="/style/{{this}}" rel="stylesheet">
+    {{/each}}
+    {{!--
+    <Link href="/style/font.css" rel="stylesheet">
+    <link href="/style/theme.css" rel="stylesheet"> --}}
+
+</head>
+
+<body class="min-h-screen bg-gray-50 flex flex-col font-body ">
+    <!-- Header -->
+    {{> header/header }}
+
+    <!-- Main Content -->
+    <main class="flex-grow">
+        {{{body}}}
+    </main>
+
+    <!-- Footer -->
+    {{> footer/footer }}
+
+    <!-- Notification Component -->
+    {{#if notification}}
+    {{> components/notification notification=notification }}
+    {{/if}}
+
+    <!-- Swiper JS -->
+    <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
+    <!-- Các JS tùy chỉnh -->
+    {{#each jsFiles}}
+    <script src="/script/{{this}}"></script>
+    {{/each}}
+</body>
+
+</html>

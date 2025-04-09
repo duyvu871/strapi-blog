@@ -1,0 +1,57 @@
+{
+    "name": "ssr-vietales-hbs",
+    "version": "1.0.0",
+    "description": "Server-side rendering với Handlebars, TypeScript và Express",
+    "main": "dist/index.js",
+    "scripts": {
+        "dev": "ts-node-dev --respawn --transpile-only src/index.ts",
+        "build": "tsc && tsc-alias && node scripts/copy-assets.js",
+        "start": "node dist/index.js",
+        "codegen": "graphql-codegen --config codegen.yml"
+    },
+    "keywords": [
+        "handlebars",
+        "express",
+        "typescript",
+        "ssr"
+    ],
+    "author": "",
+    "license": "ISC",
+    "dependencies": {
+        "@apollo/client": "^3.8.8",
+        "cross-fetch": "^4.0.0",
+        "dotenv": "^16.3.1",
+        "express": "^4.18.2",
+        "express-handlebars": "^7.1.2",
+        "graphql": "^16.10.0",
+        "graphql-request": "^7.1.2",
+        "handlebars": "^4.7.8",
+        "morgan": "^1.10.0"
+    },
+    "devDependencies": {
+        "@graphql-codegen/cli": "^5.0.5",
+        "@graphql-codegen/typescript": "^4.1.6",
+        "@types/express": "^4.17.21",
+        "@types/morgan": "^1.9.9",
+        "@types/node": "^20.10.5",
+        "axios": "^1.8.4",
+        "css": "^3.0.0",
+        "fs-extra": "^11.3.0",
+        "nodemon": "^3.1.9",
+        "ts-node": "^10.9.2",
+        "ts-node-dev": "^2.0.0",
+        "tsc-alias": "1.8.14",
+        "tsup": "^8.3.5",
+        "typescript": "^5.3.3"
+    },
+    "binary": {
+        "module_name": "bcrypt_lib",
+        "module_path": "./lib/binding/napi-v{napi_build_version}",
+        "host": "https://github.com/kelektiv/node.bcrypt.js/releases/download/",
+        "remote_path": "v{version}",
+        "package_name": "{module_name}-v{version}-napi-v{napi_build_version}-{platform}-{arch}-{libc}.tar.gz",
+        "napi_versions": [
+            3
+        ]
+    }
+}

@@ -1,0 +1,8 @@
+body, .theme-default {
+    --secondary: #F3E6FF;
+    --onSecondary: #6B13B6;
+    --bg-tertiary: transparent;
+    --on-tertiary: #6B13B6;
+    --onPrimary: #FAFAFA;
+    --primary: #8917EE;
+}
