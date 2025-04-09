@@ -43,7 +43,6 @@
         "ts-node-dev": "^2.0.0",
         "tsc-alias": "1.8.14",
         "tsup": "^8.3.5",
-        "tsc": "2.0.4",
         "typescript": "^5.3.3"
     },
     "binary": {
