@@ -1,23 +1,23 @@
-{{!-- 
+{{!--
 Component Category Card - Thẻ hiển thị danh mục với hình nền và tiêu đề
 Sử dụng: {{> components/category-card/category-card title="Tiêu đề" image="/path/to/image.jpg"}}
 --}}
-<div 
+<a
+  href="/category/{{slug}}"
   x-data="{ hover: false }"
-  x-on:mouseenter="hover = true" 
+  x-on:mouseenter="hover = true"
   x-on:mouseleave="hover = false"
-  x-on:click="window.open('/category/{{slug}}')"
-  class="relative cursor-pointer overflow-hidden rounded-lg aspect-[4/6] group {{class}}"
+  class="relative block cursor-pointer overflow-hidden rounded-2xl h-40 sm:h-full aspect-[4/6] group {{class}}"
 >
   {{#if thumbnail}}
-    <img 
-      src="{{thumbnail}}" 
-      alt="{{name}}" 
+    <img
+      src="{{thumbnail}}"
+      alt="{{name}}"
       class="absolute inset-0 w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
     >
     <div class="absolute inset-0 bg-black/40 group-hover:bg-black/50 transition-colors duration-300"></div>
   {{/if}}
-  
+
   {{#if name}}
     <div class="absolute inset-0 flex items-center justify-center p-4">
       <h3 class="text-2xl md:text-3xl typo-title-font font-normal text-white text-center font-tiempos-headline">
@@ -25,4 +25,4 @@ Sử dụng: {{> components/category-card/category-card title="Tiêu đề" imag
       </h3>
     </div>
   {{/if}}
-</div>
+</a>

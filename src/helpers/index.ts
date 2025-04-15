@@ -58,5 +58,16 @@ export const helpers = {
             obj[args[i]] = args[i + 1];
         }
         return obj;
+    },
+
+    /**
+     * Nối hai hoặc nhiều chuỗi lại với nhau
+     * @param args - Các chuỗi cần nối
+     * @returns Chuỗi đã được nối
+     */
+    concat: function (...args: any[]) {
+        // Loại bỏ tham số cuối cùng là options của Handlebars
+        const strings = args.slice(0, -1);
+        return strings.join('');
     }
 };

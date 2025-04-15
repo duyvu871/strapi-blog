@@ -1,7 +1,13 @@
-
 import { initGraphQLClient } from './graphql-client';
 import { ArticlesConnectionResponse, GetRelatedArticlesVariables } from '../../types/article';
 import { STRAPI_BASE_HOST } from '../../constants/app';
+
+// Enum to translate article types to Vietnamese
+enum ArticleTypeEnum {
+    video = 'Video',
+    podcast = 'Podcast',
+    post = 'Bài đăng',
+}
 
 export class ArticleService {
     private readonly GET_RELATED_ARTICLES = `
@@ -11,6 +17,11 @@ export class ArticleService {
                     description
                     thumbnail {
                         url
+                        alternativeText
+                    }
+                    categories {
+                      name,
+                      slug
                     }
                     publishedAt
                     slug
@@ -44,11 +55,11 @@ export class ArticleService {
                 ...article,
                 title: article.title,
                 thumbnail: {
-                    url: `${STRAPI_BASE_HOST}${article.thumbnail.url}`,
+                    url: `${STRAPI_BASE_HOST}${article?.thumbnail?.url}`,
                 },
                 publishedAt: article.publishedAt,
                 slug: article.slug,
-                type: article.type,
+                type: article.type ? ArticleTypeEnum[article.type as keyof typeof ArticleTypeEnum] || article.type : '',
             }
         })
     }

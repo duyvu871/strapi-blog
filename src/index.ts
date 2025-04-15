@@ -78,13 +78,19 @@ app.get('/components', async (req, res) => {
 // Routes
 app.get('/', async (req, res) => {
     const categories = await categoryService.getAllCategories();
-    const relatedArticle = await articleService.getRelatedArticles();
+    const relatedArticle = await articleService.getRelatedArticles({
+        sort: ['publishedAt:desc'],
+        pagination: {
+            limit: 4,
+        },
+    });
     console.log('categories: ', categories);
     console.log('relatedArticle', relatedArticle);
     const categoriesParse = categoryService.categoriesParse(categories);
-    const relatedArticleWithBaseUrl = articleService.articlesParse(relatedArticle)[0];
+    const parsedRelatedArticle = articleService.articlesParse(relatedArticle);
+    // const relatedArticleWithBaseUrl = articleService.articlesParse(relatedArticle)[0];
     console.log('categoriesParse', categoriesParse);
-    console.log('relatedArticleWithBaseUrl', relatedArticleWithBaseUrl);   
+    console.log('relatedArticleWithBaseUrl', parsedRelatedArticle);   
     res.render('home', {
         title: 'Trang chủ',
         currentPath: req.path,
@@ -104,7 +110,8 @@ app.get('/', async (req, res) => {
             ogUrl: 'https://example.com'
         },
         categories: categoriesParse,
-        relatedArticle: relatedArticleWithBaseUrl,
+        relatedArticle: parsedRelatedArticle[0],
+        articles: parsedRelatedArticle.slice(1),
     });
 });
 

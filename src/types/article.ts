@@ -6,6 +6,11 @@ export interface ArticlesConnectionResponse {
                 description: string;
                 thumbnail: {
                     url: string;
+                    alternativeText: string;
+                };
+                categories: {
+                    name: string;
+                    slug: string;
                 };
                 publishedAt: string;
                 slug: string;

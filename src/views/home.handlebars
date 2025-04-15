@@ -16,7 +16,24 @@
 </section>
 
 <div class="container mx-auto px-4">
-    <h1 class="text-3xl font-bold mb-6">Chào mừng đến với Vietales</h1>
+    <h1 class="text-4xl md:text-6xl typo-title-font italic text-purple-600 font-thin text-center mb-16">Chuyện lôi cuốn</h1>
+
+    <section class="mb-12">
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {{#each articles}}
+                {{> components/article-card/article-card 
+                    title=this.title 
+                    excerpt=this.description 
+                    image=this.thumbnail.url 
+                    imageAlt=this.thumbnail.alternativeText
+                    type=this.type
+                    category=this.categories.name
+                    publishDate=(formatDate this.publishedAt)
+                    url=(concat "/article/" this.slug)
+                }}
+            {{/each}}
+        </div>
+    </section>
 
     <div class="bg-white shadow-md rounded-lg p-6 mb-6">
         <h2 class="text-xl font-semibold mb-4">Giới thiệu</h2>

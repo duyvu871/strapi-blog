@@ -18,7 +18,7 @@
                         opacity 0.35s ease,
                         z-index 0s linear 0.1s; /* z-index thay đổi nhanh khi hover */
             transform-style: preserve-3d;
-             will-change: transform, opacity, z-index; /* Tối ưu */
+            will-change: transform, opacity, z-index; /* Tối ưu */
         }
         /* Style cho item đang active (hover) */
         .carousel-item.item-is-active {
@@ -88,7 +88,7 @@
                     opacity: $item.css('opacity'),     // Lấy giá trị opacity hiện tại
                     zIndex: $item.css('z-index')       // Lấy giá trị z-index hiện tại
                 });
-                 // Lưu transform gốc riêng để dễ truy cập
+                // Lưu transform gốc riêng để dễ truy cập
                 $item.data('initial-transform', $item.css('transform'));
             });
 
@@ -101,7 +101,7 @@
                 if ($activeItem && !$activeItem.is($currentItem)) {
                     const initialStyle = $activeItem.data('initial-style');
                     if (initialStyle) {
-                         // Khôi phục style gốc
+                        // Khôi phục style gốc
                         $activeItem.css({
                             'transform': initialStyle.transform,
                             'opacity': initialStyle.opacity,
@@ -116,37 +116,20 @@
                 const activeScale = 1.1; // Mức độ scale khi active
                 const activeYOffset = -15; // Nhấc lên bao nhiêu px
 
-                // Phân tích transform gốc để giữ nguyên các phần khác (ví dụ translateX)
-                // Cách đơn giản nhất là giả định transform gốc chỉ có translateX và scale
-                // Nếu phức tạp hơn (có rotate), cần phân tích kỹ hơn hoặc chỉ append/prepend
-                let newTransform = initialTransform; // Bắt đầu từ transform gốc
-
-                // Cố gắng thay thế hoặc thêm scale và translateY
-                // Regex để tìm scale hiện có (nếu có)
-                const scaleRegex = /scale\([^)]+\)/;
-                if (scaleRegex.test(newTransform)) {
-                    newTransform = newTransform.replace(scaleRegex, `scale(${activeScale})`);
-                } else {
-                    newTransform += ` scale(${activeScale})`; // Thêm nếu chưa có
-                }
-
-                 // Regex để tìm translateY hiện có (nếu có)
-                const translateYRegex = /translateY\([^)]+\)/;
-                 if (translateYRegex.test(newTransform)) {
-                     newTransform = newTransform.replace(translateYRegex, `translateY(${activeYOffset}px)`);
-                 } else {
-                    // Thêm vào sau cùng hoặc vị trí hợp lý
-                    newTransform += ` translateY(${activeYOffset}px)`;
-                 }
+                // Tạo transform mới dựa trên transform ban đầu
+                let matrix = new DOMMatrix(initialTransform);
+                
+                // Trích xuất translateX từ matrix gốc để giữ nguyên
+                let translateX = matrix.e;
+                
+                // Tạo transform mới với scale mới và translateY mới, giữ nguyên translateX
+                let newTransform = `translateX(${translateX}px) translateY(${activeYOffset}px) scale(${activeScale})`;
 
                 $currentItem.css({
                     'transform': newTransform,
                     'opacity': 1, // Luôn rõ nhất
                     'z-index': maxZIndexActive // Luôn trên cùng
                 }).addClass('item-is-active');
-
-                // --- QUAN TRỌNG: Không thay đổi style của các item khác ---
-
             });
 
             $carouselContainer.on('mouseleave', function() {
@@ -164,18 +147,86 @@
                 }
             });
 
-             // Đảm bảo style ban đầu được áp dụng đúng khi tải trang
-             $items.each(function() {
-                 const $item = $(this);
-                 const initialState = $item.data('initial-state');
-                 if (initialState) {
-                     $item.css({
-                         'transform': initialState.transform,
-                         'opacity': initialState.opacity,
-                         'z-index': initialState.zIndex
-                     });
-                 }
-             });
+            // Đảm bảo style ban đầu được áp dụng đúng khi tải trang
+            $items.each(function() {
+                const $item = $(this);
+                const initialStyle = $item.data('initial-style');
+                if (initialStyle) {
+                    $item.css({
+                        'transform': initialStyle.transform,
+                        'opacity': initialStyle.opacity,
+                        'z-index': initialStyle.zIndex
+                    });
+                }
+            });
+            
+            // Thêm chức năng click để di chuyển item vào trung tâm
+            $items.on('click', function() {
+                const clickedIndex = $(this).data('index');
+                
+                // Di chuyển tất cả các item vào vị trí mới dựa trên index được click
+                $items.each(function() {
+                    const $item = $(this);
+                    const itemIndex = $item.data('index');
+                    const offset = itemIndex - clickedIndex;
+                    
+                    // Áp dụng transform, opacity và z-index mới dựa trên offset
+                    let newTransform, newOpacity, newZIndex;
+                    
+                    switch(offset) {
+                        case -2: // Xa nhất bên trái
+                            newTransform = 'translateX(-100%) scale(0.7)';
+                            newOpacity = 0.6;
+                            newZIndex = 1;
+                            break;
+                        case -1: // Gần bên trái
+                            newTransform = 'translateX(-50%) scale(0.85)';
+                            newOpacity = 0.8;
+                            newZIndex = 2;
+                            break;
+                        case 0: // Trung tâm
+                            newTransform = 'translateX(0%) scale(1)';
+                            newOpacity = 1;
+                            newZIndex = 3;
+                            break;
+                        case 1: // Gần bên phải
+                            newTransform = 'translateX(50%) scale(0.85)';
+                            newOpacity = 0.8;
+                            newZIndex = 2;
+                            break;
+                        case 2: // Xa nhất bên phải
+                            newTransform = 'translateX(100%) scale(0.7)';
+                            newOpacity = 0.6;
+                            newZIndex = 1;
+                            break;
+                        default: // Ẩn các item ngoài tầm nhìn
+                            if (offset < -2) { // Quá xa bên trái
+                                newTransform = 'translateX(-150%) scale(0.5)';
+                                newOpacity = 0;
+                            } else { // Quá xa bên phải
+                                newTransform = 'translateX(150%) scale(0.5)';
+                                newOpacity = 0;
+                            }
+                            newZIndex = 0;
+                    }
+                    
+                    // Lưu style mới làm style khởi tạo
+                    $item.data('initial-style', {
+                        transform: newTransform,
+                        opacity: newOpacity,
+                        zIndex: newZIndex
+                    });
+                    
+                    $item.data('initial-transform', newTransform);
+                    
+                    // Áp dụng style mới
+                    $item.css({
+                        'transform': newTransform,
+                        'opacity': newOpacity,
+                        'z-index': newZIndex
+                    });
+                });
+            });
         });
     </script>
 
