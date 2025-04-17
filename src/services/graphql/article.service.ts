@@ -108,8 +108,17 @@ export class ArticleService {
         // Add Elementor compatibility styles
         let processedContent = content;
         
-        // Remove all inline style attributes from all HTML tags
-        processedContent = processedContent.replace(/ style="[^"]*"/g, '');
+        // Xóa các biến CSS chứa --tw trong thuộc tính style
+        // processedContent = processedContent.replace(/var\(--tw-[^)]*\)/g, 'inherit');
+        
+        // Xóa các khai báo CSS Tailwind có dạng --tw-*: ;
+        // processedContent = processedContent.replace(/--tw-[^:]*:\s*;/g, '');
+
+        // Xóa các style không cần thiết
+        // processedContent = processedContent.replace(/style="[^"]*"/g, '');
+
+        // relace all heght and width to auto
+        // processedContent = processedContent.replace(/height:\s*\d+px;/g, 'height: auto;');
         
         // Replace Elementor-specific classes with tailwind equivalents
         processedContent = processedContent
@@ -126,8 +135,9 @@ export class ArticleService {
             .replace(/color: ?var\( ?--e-global-color-secondary ?\)/g, `color: ${colors.secondary}`)
             .replace(/background-color: ?var\( ?--e-global-color-primary ?\)/g, `background-color: ${colors.primary}`)
             .replace(/background-color: ?var\( ?--e-global-color-secondary ?\)/g, `background-color: ${colors.secondary}`);
-            // replace all assets with strapi base host
-            processedContent = replaceStrapiUrls(processedContent);
+
+        // replace all assets with strapi base host
+        processedContent = replaceStrapiUrls(processedContent);
         
         return processedContent;
     }

@@ -6,6 +6,10 @@
   border-radius: 0.5rem;
 }
 
+.article-content * {
+    height: auto !important;
+}
+
 /* Base typography styles */
 .article-content h1, 
 .article-content h2, 
