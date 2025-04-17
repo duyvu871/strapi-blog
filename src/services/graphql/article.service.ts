@@ -108,6 +108,9 @@ export class ArticleService {
         // Add Elementor compatibility styles
         let processedContent = content;
         
+        // Chỉ xóa các thuộc tính style chứa biến Elementor
+        processedContent = processedContent.replace(/ style="[^"]*var\([^"]*\)[^"]*"/g, '');
+        
         // Replace Elementor-specific classes with tailwind equivalents
         processedContent = processedContent
             // Convert Elementor section layouts to flexbox/grid
@@ -123,76 +126,11 @@ export class ArticleService {
             .replace(/color: ?var\( ?--e-global-color-secondary ?\)/g, `color: ${colors.secondary}`)
             .replace(/background-color: ?var\( ?--e-global-color-primary ?\)/g, `background-color: ${colors.primary}`)
             .replace(/background-color: ?var\( ?--e-global-color-secondary ?\)/g, `background-color: ${colors.secondary}`);
-            // replace all assets with strapi base host
-            processedContent = replaceStrapiUrls(processedContent)
-        // Add custom style tag with theme-specific CSS
-        const elementorStyles = `
-        <style>
-            .article-content {
-                color: ${colors.text};
-                background-color: ${colors.background};
-                font-family: 'SVN-BasisGrotesquePro', sans-serif;
-            }
-            .article-content .article-section {
-                margin-bottom: 2rem;
-                width: 100%;
-            }
-            .article-content .article-column {
-                padding: 0.5rem;
-            }
-            .article-content .article-heading h1, 
-            .article-content .article-heading h2, 
-            .article-content .article-heading h3, 
-            .article-content .article-heading h4, 
-            .article-content .article-heading h5, 
-            .article-content .article-heading h6 {
-                color: ${colors.primary};
-                margin-bottom: 1rem;
-                font-weight: 700;
-            }
-            .article-content .article-text {
-                margin-bottom: 1rem;
-                line-height: 1.8;
-            }
-            .article-content .article-image img {
-                max-width: 100%;
-                height: auto;
-                border-radius: 0.5rem;
-                margin: 1rem 0;
-            }
-            .article-content a {
-                color: ${colors.primary};
-                text-decoration: underline;
-            }
-            .article-content a:hover {
-                text-decoration: none;
-            }
-            .article-content ul, .article-content ol {
-                padding-left: 2rem;
-                margin: 1rem 0;
-            }
-            .article-content li {
-                margin-bottom: 0.5rem;
-            }
-            .article-content blockquote {
-                border-left: 4px solid ${colors.secondary};
-                padding-left: 1rem;
-                font-style: italic;
-                margin: 1.5rem 0;
-            }
-            /* Responsive layout fixes */
-            @media (max-width: 768px) {
-                .article-content .article-section {
-                    flex-direction: column;
-                }
-                .article-content .article-column {
-                    width: 100%;
-                }
-            }
-        </style>
-        `;
+            
+        // replace all assets with strapi base host
+        processedContent = replaceStrapiUrls(processedContent);
         
-        return elementorStyles + processedContent;
+        return processedContent;
     }
 
     async getRelatedArticles(variables: GetRelatedArticlesVariables = {}): Promise<ArticlesConnectionResponse['data']['articles_connection']['nodes']> {
