@@ -20,7 +20,7 @@
     <meta property="og:image" content="{{meta.ogImage}}">
     <meta property="og:url" content="{{meta.ogUrl}}">
     <meta name="twitter:card" content="summary_large_image">
-    <title>{{title}} | Vietales</title>
+    <title>{{title}} | Lĩnh Nam Dạ Thoại</title>
     <!-- Google tag (gtag.js) -->
     <!-- Google tag (gtag.js) -->
     <!-- Tailwind CSS từ CDN -->
@@ -38,6 +38,8 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
     <!-- Swiper.js từ CDN -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@10/swiper-bundle.min.css" />
+    <!-- Scroll to top CSS -->
+    <link href="/style/scroll-to-top.css" rel="stylesheet">
     <!-- Các CSS tùy chỉnh -->
     {{#each cssFiles}}
     <link href="/style/{{this}}" rel="stylesheet">
@@ -60,6 +62,9 @@
     <!-- Footer -->
     {{> footer/footer }}
 
+    <!-- Scroll to Top Button -->
+    {{> scroll-to-top }}
+
     <!-- Notification Component -->
     {{#if notification}}
     {{> components/notification notification=notification }}
@@ -67,6 +72,8 @@
 
     <!-- Swiper JS -->
     <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
+    <!-- Scroll to top JS -->
+    <script src="/script/scroll-to-top.js"></script>
     <!-- Các JS tùy chỉnh -->
     {{#each jsFiles}}
     <script src="/script/{{this}}"></script>

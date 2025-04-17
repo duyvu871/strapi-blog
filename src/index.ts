@@ -7,6 +7,7 @@ import { mockSwiper } from './mock/series';
 import { CategoryService } from './services/graphql/category.service';
 import { ArticleService } from './services/graphql/article.service';
 import helmet from 'helmet';
+import { log } from 'console';
 
 // Khởi tạo Express app
 const app = express();
@@ -88,11 +89,10 @@ app.get('/', async (req, res) => {
     console.log('relatedArticle', relatedArticle);
     const categoriesParse = categoryService.categoriesParse(categories);
     const parsedRelatedArticle = articleService.articlesParse(relatedArticle);
-    // const relatedArticleWithBaseUrl = articleService.articlesParse(relatedArticle)[0];
     console.log('categoriesParse', categoriesParse);
     console.log('relatedArticleWithBaseUrl', parsedRelatedArticle);   
     res.render('home', {
-        title: 'Trang chủ',
+        title: 'Lĩnh Nam Dạ Thoại - Trang chủ',
         currentPath: req.path,
         cssFiles: [
             'swiper.css',
@@ -103,15 +103,113 @@ app.get('/', async (req, res) => {
         ],
         meta: {
             description: 'Đưa câu chuyện Việt Nam ra thế giới và mang câu chuyện thế giới về Việt Nam',
-            keywords: 'từ khóa, trang chủ',
-            ogTitle: 'Vietales - Chuyện Người Việt Kể',
+            keywords: 'lĩnh nam dạ thoại, regisna.site, trang chủ',
+            ogTitle: 'Lĩnh Nam Dạ Thoại - Chuyện Người Việt Kể',
             ogDescription: 'Đưa câu chuyện Việt Nam ra thế giới và mang câu chuyện thế giới về Việt Nam',
             ogImage: '/assets/images/og-image.jpg',
-            ogUrl: 'https://example.com'
+            ogUrl: 'https://regisna.site'
         },
         categories: categoriesParse,
         relatedArticle: parsedRelatedArticle[0],
         articles: parsedRelatedArticle.slice(1),
+    });
+});
+
+// Route cho trang article với slug
+app.get('/article/:slug', async (req, res) => {
+    try {
+        const { slug } = req.params;
+        
+        // Lấy thông tin bài viết từ slug
+        const articleData = await articleService.getArticleBySlug({
+            filters: {
+                slug: {
+                    eq: slug
+                }
+            }
+        });
+        
+        // Nếu không tìm thấy bài viết, trả về trang 404
+        if (!articleData || articleData.length === 0) {
+            return res.status(404).render('404', {
+                title: 'Không tìm thấy trang | Lĩnh Nam Dạ Thoại',
+                cssFiles: [
+                    'font.css',
+                    'theme.css',
+                    'nav.css',
+                    'style.css'
+                ],
+                meta: {
+                    description: 'Trang bạn đang tìm kiếm không tồn tại',
+                    keywords: 'không tìm thấy, 404, error, lĩnh nam dạ thoại',
+                    ogTitle: 'Không tìm thấy trang - Lĩnh Nam Dạ Thoại',
+                    ogDescription: 'Trang bạn đang tìm kiếm không tồn tại',
+                    ogUrl: `https://regisna.site/article/${slug}`
+                }
+            });
+        }
+        
+        // Parse dữ liệu bài viết
+        const parsedArticle = articleService.articlesParseBySlug(articleData)[0];
+        
+        // Lấy danh mục để hiển thị trên thanh navigation
+        const categories = await categoryService.getAllCategories();
+        const categoriesParse = categoryService.categoriesParse(categories);
+        
+        // Tạo full URL cho tính năng chia sẻ
+        const host = req.get('host');
+        const protocol = req.protocol;
+        const fullUrl = `${protocol}://${host}/article/${slug}`;
+        
+        // Render trang chi tiết bài viết
+        res.render('article', {
+            title: `${parsedArticle.title} | Lĩnh Nam Dạ Thoại`,
+            currentPath: req.path,
+            cssFiles: [
+                'font.css',
+                'theme.css',
+                'nav.css',
+                'article.css',
+                'style.css'
+            ],
+            meta: {
+                description: parsedArticle.description || parsedArticle.title,
+                keywords: `${parsedArticle.title}, lĩnh nam dạ thoại, regisna.site`,
+                ogTitle: `${parsedArticle.title} - Lĩnh Nam Dạ Thoại`,
+                ogDescription: parsedArticle.description || parsedArticle.title,
+                ogImage: parsedArticle.thumbnail?.url || '/assets/images/og-image.jpg',
+                ogUrl: `https://regisna.site/article/${slug}`
+            },
+            article: parsedArticle,
+            categories: categoriesParse,
+            fullUrl: fullUrl // Pass the full URL for sharing
+        });
+    } catch (error) {
+        console.error('Error fetching article:', error);
+        res.status(500).render('error', {
+            title: 'Lỗi hệ thống | Lĩnh Nam Dạ Thoại',
+            message: 'Đã xảy ra lỗi khi tải bài viết. Vui lòng thử lại sau.'
+        });
+    }
+});
+
+// Global 404 handler - thêm trước phần khởi động server
+app.use((req, res) => {
+    res.status(404).render('404', {
+        title: 'Không tìm thấy trang | Lĩnh Nam Dạ Thoại',
+        cssFiles: [
+            'font.css', 
+            'theme.css',
+            'nav.css',
+            'style.css'
+        ],
+        meta: {
+            description: 'Trang bạn đang tìm kiếm không tồn tại',
+            keywords: 'không tìm thấy, 404, error, lĩnh nam dạ thoại, regisna.site',
+            ogTitle: 'Không tìm thấy trang - Lĩnh Nam Dạ Thoại',
+            ogDescription: 'Trang bạn đang tìm kiếm không tồn tại',
+            ogUrl: 'https://regisna.site/404'
+        }
     });
 });
 

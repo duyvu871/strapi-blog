@@ -1,0 +1,253 @@
+/* Article page specific styles with Elementor support */
+.article-content {
+  font-family: 'SVN-BasisGrotesquePro', sans-serif;
+  line-height: 1.8;
+  padding: 1.5rem;
+  border-radius: 0.5rem;
+}
+
+/* Base typography styles */
+.article-content h1, 
+.article-content h2, 
+.article-content h3, 
+.article-content h4, 
+.article-content h5, 
+.article-content h6 {
+  font-weight: 700;
+  margin-top: 1.5em;
+  margin-bottom: 0.75em;
+}
+
+.article-content h1 {
+  font-size: 1.8rem;
+}
+
+.article-content h2 {
+  font-size: 1.5rem;
+}
+
+.article-content h3 {
+  font-size: 1.25rem;
+}
+
+.article-content p {
+  margin-bottom: 1.5em;
+}
+
+.article-content img {
+  max-width: 100%;
+  height: auto;
+  border-radius: 0.5rem;
+  margin: 1.5em 0;
+}
+
+.article-content a {
+  color: #0066cc;
+  text-decoration: underline;
+}
+
+.article-content a:hover {
+  text-decoration: none;
+}
+
+.article-content blockquote {
+  border-left: 4px solid #e5e7eb;
+  padding-left: 1rem;
+  font-style: italic;
+  margin: 1.5em 0;
+}
+
+.article-content ul, 
+.article-content ol {
+  margin: 1.5em 0;
+  padding-left: 2em;
+}
+
+.article-content ul li, 
+.article-content ol li {
+  margin-bottom: 0.5em;
+}
+
+/* Social sharing styles */
+.social-share-btn {
+  transition: all 0.2s ease-in-out;
+}
+
+.social-share-btn:hover {
+  transform: translateY(-2px);
+}
+
+.facebook-share {
+  background-color: #3b5998;
+  color: white;
+}
+
+.facebook-share:hover {
+  background-color: #2d4373;
+}
+
+.twitter-share {
+  background-color: #1da1f2;
+  color: white;
+}
+
+.twitter-share:hover {
+  background-color: #0c85d0;
+}
+
+.copy-link-btn {
+  background-color: #6B7280;
+  color: white;
+}
+
+.copy-link-btn:hover {
+  background-color: #4B5563;
+}
+
+.share-popup-btn {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.5rem 1rem;
+  border-radius: 0.25rem;
+  font-weight: 500;
+  cursor: pointer;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  border: none;
+  font-size: 0.875rem;
+}
+
+.share-popup-btn svg {
+  margin-right: 0.5rem;
+  width: 1.25rem;
+  height: 1.25rem;
+}
+
+/* Phong cách hover mới cho nút chia sẻ */
+.share-popup-btn::after {
+  content: '';
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  top: 0;
+  left: 0;
+  border-radius: 0.25rem;
+  opacity: 0;
+  background: rgba(255, 255, 255, 0.1);
+  transition: opacity 0.3s;
+}
+
+.share-popup-btn:hover::after {
+  opacity: 1;
+}
+
+.share-popup-btn:active {
+  transform: translateY(1px);
+}
+
+@media (max-width: 640px) {
+  .share-popup-btn {
+    padding: 0.4rem 0.75rem;
+    font-size: 0.75rem;
+  }
+  
+  .share-popup-btn svg {
+    width: 1rem;
+    height: 1rem;
+  }
+}
+
+/* Elementor specific layout styles */
+.article-content .article-section {
+  display: flex;
+  flex-wrap: wrap;
+  margin-bottom: 2rem;
+  width: 100%;
+}
+
+.article-content .article-column {
+  flex: 1;
+  padding: 0.5rem;
+  min-width: 250px;
+}
+
+.article-content .article-text {
+  margin-bottom: 1rem;
+}
+
+.article-content .article-image {
+  text-align: center;
+  margin: 1rem 0;
+}
+
+.article-content .article-heading {
+  margin-bottom: 1rem;
+}
+
+/* Form elements that might be in Elementor content */
+.article-content form input,
+.article-content form textarea,
+.article-content form select {
+  width: 100%;
+  padding: 0.5rem;
+  margin-bottom: 1rem;
+  border: 1px solid #ccc;
+  border-radius: 0.25rem;
+}
+
+.article-content form button {
+  padding: 0.5rem 1rem;
+  background-color: #0066cc;
+  color: white;
+  border: none;
+  border-radius: 0.25rem;
+  cursor: pointer;
+}
+
+/* Additional Elementor components */
+.article-content .elementor-button {
+  display: inline-block;
+  padding: 0.75rem 1.5rem;
+  border-radius: 0.25rem;
+  text-decoration: none;
+  font-weight: 600;
+  text-align: center;
+  transition: all 0.3s ease;
+}
+
+.article-content .elementor-icon-list-items {
+  list-style: none;
+  padding-left: 0;
+}
+
+.article-content .elementor-icon-list-item {
+  display: flex;
+  align-items: center;
+  margin-bottom: 0.5rem;
+}
+
+.article-content .elementor-icon {
+  margin-right: 0.5rem;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .article-content .article-section {
+    flex-direction: column;
+  }
+  
+  .article-content .article-column {
+    width: 100%;
+  }
+  
+  .article-content h1 {
+    font-size: 1.5rem;
+  }
+  
+  .article-content h2 {
+    font-size: 1.3rem;
+  }
+  
+  .article-content h3 {
+    font-size: 1.1rem;
+  }
+}
