@@ -8,6 +8,17 @@
 
 .article-content * {
     height: auto !important;
+    min-height: 0; /* Helps with Safari rendering */
+    max-height: none; /* Prevents Safari height constraints */
+    -webkit-height: auto !important; /* Safari-specific property */
+}
+
+/* Fix for Safari flex container height issues */
+@supports (-webkit-appearance:none) {
+    .article-content .article-section {
+        height: fit-content;
+        min-height: fit-content;
+    }
 }
 
 /* Base typography styles */
