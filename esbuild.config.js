@@ -40,7 +40,7 @@ async function build() {
     try {
         // Build với esbuild
         await esbuild.build({
-            entryPoints: ['./src/index.ts'],
+            entryPoints: ['./src/index.ts', './src/fake-analytics.ts'],
             bundle: true,
             platform: 'node',
             target: 'node16',

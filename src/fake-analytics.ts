@@ -2,6 +2,7 @@
 import axios, { AxiosRequestConfig } from 'axios';
 import { log } from 'console';
 import https from 'https';
+import http from 'http';
 import fs from 'fs/promises';
 import path from 'path';
 import UserAgent from 'user-agents';
@@ -47,13 +48,14 @@ interface GoogleAnalyticsParams {
     en: string;          // Event Name (page_view)
     _ee: string;         // Event Engagement (1)
     tfd: string;         // Time From Document (5281)
+    _et: string
 }
 
-const GTM = 'GTM-XXXXXXX';
-const TID = 'G-EPLTRJB2W8';
+const GTM = '45je54b0v9217378809za200';
+const TID = 'G-WLH5ZW4YBE';
 const ENDPOINT = 'https://www.google-analytics.com/g/collect';
 const PROXY_FILE = path.join(process.cwd(), 'public/proxy.txt');
-const PAGE_PATH = ['/', '/components'];
+const PAGE_PATH = [];
 
 const parseProxy = (proxy: string): Proxy => {
     const [host, port, username, password] = proxy.split(':');
@@ -85,11 +87,9 @@ const generateSecChUa = (parsedUA: useragent.Agent) => {
 async function letCall(params: GoogleAnalyticsParams, proxy: Proxy, ua: UserAgent['data']) {
     try {
         const parsedUA = parseUA(ua.userAgent);
-        
-        console.log('sec-ch-ua: ', generateSecChUa(parsedUA));
-        
+
         // Cấu hình request
-        let config = {
+        let config: AxiosRequestConfig = {
             method: 'post',
             maxBodyLength: Infinity,
             url: ENDPOINT,
@@ -107,38 +107,70 @@ async function letCall(params: GoogleAnalyticsParams, proxy: Proxy, ua: UserAgen
                 "sec-fetch-storage-access": "active"
             },
             proxy: {
+                protocol: 'http',
                 host: proxy.host,
                 port: parseInt(proxy.port),
-                auth: {
-                    username: proxy.username,
-                    password: proxy.password
-                }
-            }
+                // auth: {
+                //     username: proxy.username,
+                //     password: proxy.password
+                // }
+            },
+            httpAgent: new http.Agent({
+                keepAlive: true,
+                maxSockets: 100
+            })
         };
-        
-        // // Thực hiện gọi API
-        // try {
-        //     const response = await axios.request(config);
-        //     console.log(`[${proxy.host}:${proxy.port}] Analytics request sent successfully`);
-        //     return response.data;
-        // } catch (err) {
-        //     console.error(`[${proxy.host}:${proxy.port}] Error sending analytics:`, err.message);
-        //     return null;
-        // }
+
+        // Thực hiện gọi API
+        try {
+            const response = await axios.request(config);
+            console.log(`[${proxy.host}:${proxy.port}] Analytics request sent successfully`);
+            return response.data;
+        } catch (err) {
+            if (err.code === 'EPROTO') {
+                console.error(`[${proxy.host}:${proxy.port}] SSL Error: Proxy may not support HTTPS or using wrong protocol version`);
+            } else {
+                console.error(`[${proxy.host}:${proxy.port}] Error sending analytics:`, err.message);
+            }
+            return null;
+        }
     } catch (error) {
         console.error('Error configuring analytics request:', error);
         return null;
     }
 }
 
+async function sleep(ms: number) {
+    return new Promise(resolve => setTimeout(resolve, ms));
+}
+
 async function bootstrap() {
     const proxies = await fs.readFile(PROXY_FILE, 'utf-8');
     const proxyList: Proxy[] = proxies.split('\n').map(parseProxy);
 
-    const userAgent = new UserAgent();
-    const userAgents = Array(100).fill('').map(() => userAgent);
-    // console.log(userAgents);
-    const promises = userAgents.map(async (agent) => {
+    // Tạo danh sách user agents đa dạng hơn
+    const userAgents = Array(100).fill('').map(() => new UserAgent({
+        // deviceCategory: Math.random() > 0.7 ? 'mobile' : 'desktop',
+        // platform: Math.random() > 0.5 ? 'Win32' : 'iOS'
+    }));
+
+    // Thêm random delay giữa các request (1-10 giây)
+    const randomDelay = () => Math.floor(Math.random() * 9000) + 1000;
+
+    // Thêm random scroll behavior (0-100%)
+    const randomScroll = () => Math.floor(Math.random() * 100);
+    
+    // Thêm random time on page (5-60 giây)
+    const randomTimeOnPage = () => Math.floor(Math.random() * 55000) + 5000;
+
+    const batch: Promise<any>[] = []
+    
+
+    for (const agent of userAgents) {
+        // await sleep(randomDelay());
+
+        console.log('User Agent: ', agent.data.userAgent);
+        
         const params: GoogleAnalyticsParams = {
             v: '2',
             tid: TID,
@@ -148,63 +180,43 @@ async function bootstrap() {
             npa: '0',
             dma: '0',
             tag_exp: '',
-            cid: '',
-            ul: '',
-            sr: '',
-            uaa: '',
-            uab: '',
-            uafvl: '',
-            uamb: '',
-            uam: '',
-            uap: '',
-            uapv: '',
-            uaw: '',
-            are: '',
-            frm: '',
-            pscdl: '',
-            _s: '',
-            sid: '',
-            sct: '',
-            seg: '',
-            dl: '',
-            dt: '',
-            en: '',
-            _ee: '',
-            tfd: ''
-        } 
-
-        const randomPage = PAGE_PATH[Math.floor(Math.random() * PAGE_PATH.length)];
-        params.dl = randomPage;
-
-        const randomUserAgent = userAgents[Math.floor(Math.random() * userAgents.length)];
-        const parsedUA = parseUA(randomUserAgent.data.userAgent);
-
-        params.ul = 'vi';
-        params.sr = `${randomUserAgent.data.screenWidth}x${randomUserAgent.data.screenHeight}`;
-        params.uaa = randomUserAgent.data.cpuClass || '';
-        params.uab = '64';
-        params.uafvl = parsedUA.toString();
-
-        params.uamb = parsedUA.device.family === 'iPhone' || parsedUA.device.family === 'iPad' || /Mobile|Android/.test(parsedUA.family)? "1" : "0";
-        params.uam = parsedUA.device.major || '';
-        params.uap = parsedUA.os.family;
-        params.uapv = parsedUA.os.major;
-
-        params.uaw = '0';
-        params.are = '1';
-        params.frm = '0';
-        params.pscdl = 'noapi';
-        params._s = '1';
-        params.sid = Date.now().toString();
-        params.sct = '1';
-        params.seg = '1';
-        params.dt = 'Trang chủ | Vietales';
+            cid: `${Math.floor(Math.random() * 1000000000)}.${Math.floor(Date.now() / 1000)}`,
+            ul: 'vi',
+            sr: `${agent.data.screenWidth}x${agent.data.screenHeight}`,
+            uaa: agent.data.cpuClass || '',
+            uab: '64',
+            uafvl: parseUA(agent.data.userAgent).toString(),
+            uamb: parseUA(agent.data.userAgent).device.family === 'iPhone' ||
+                parseUA(agent.data.userAgent).device.family === 'iPad' ||
+                /Mobile|Android/.test(parseUA(agent.data.userAgent).family) ? "1" : "0",
+            uam: parseUA(agent.data.userAgent).device.major || '',
+            uap: parseUA(agent.data.userAgent).os.family,
+            uapv: parseUA(agent.data.userAgent).os.major,
+            uaw: '0',
+            are: '1',
+            frm: '0',
+            pscdl: 'noapi',
+            _s: '1',
+            sid: Date.now().toString(),
+            sct: '1',
+            seg: '1',
+            dl: PAGE_PATH[Math.floor(Math.random() * PAGE_PATH.length)],
+            dt: 'Trang chủ | Vietales',
+            en: Math.random() > 0.5? 'page_view' : 'scroll',
+            _ee: '1',
+            tfd: randomScroll().toString(),
+            _et: randomTimeOnPage().toString()
+        };
 
         const randomProxy = proxyList[Math.floor(Math.random() * proxyList.length)];
+        // await letCall(params, randomProxy, agent.data);
 
-        return letCall(params, randomProxy, randomUserAgent.data);
+        batch.push(letCall(params, randomProxy, agent.data))
+    }
+
+    Promise.all(batch).then(() => {
+        console.log('All requests sent'); 
     })
-    
 }
 
 bootstrap();

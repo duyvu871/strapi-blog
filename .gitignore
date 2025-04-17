@@ -131,3 +131,5 @@ build
 .strapi-cloud.json
 
 public/proxy.txt
+public/proxy_check_log.txt
+docs/analytics.md
