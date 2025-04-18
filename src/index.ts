@@ -270,7 +270,7 @@ app.get('/category/:slug', async (req, res) => {
             },
             category: parsedCategory,
             relatedArticle: parsedArticles[0],
-            articles: parsedArticles.slice(1),
+            articles: parsedArticles,
             categories: categoriesParse,
             fullUrl: fullUrl // Pass the full URL for sharing
         });

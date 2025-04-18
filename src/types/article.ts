@@ -7,6 +7,29 @@ export interface ArticlesConnectionResponse {
                 thumbnail: {
                     url: string;
                     alternativeText: string;
+                    formats: {
+                        small: {
+                            url: string;
+                            width: number;
+                            height: number;
+                        };
+                        medium: {
+                            url: string;
+                            width: number;
+                            height: number;
+                        };
+                        large: {
+                            url: string;
+                            width: number;
+                            height: number;
+                        };
+                        thumbnail: {
+                            url: string;
+                            width: number;
+                            height: number;
+                        };
+                    };
+                    name: string;
                 };
                 categories: {
                     name: string;
