@@ -269,7 +269,8 @@ app.get('/category/:slug', async (req, res) => {
                 ogUrl: `https://regisna.site/category/${slug}`
             },
             category: parsedCategory,
-            articles: parsedArticles,
+            relatedArticle: parsedArticles[0],
+            articles: parsedArticles.slice(1),
             categories: categoriesParse,
             fullUrl: fullUrl // Pass the full URL for sharing
         });
