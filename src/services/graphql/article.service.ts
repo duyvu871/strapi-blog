@@ -2,6 +2,7 @@ import { initGraphQLClient } from './graphql-client';
 import { ArticleBySlugResponse, ArticlesConnectionResponse, GetArticleBySlugVariables, GetRelatedArticlesVariables } from '../../types/article';
 import { STRAPI_BASE_HOST } from '../../constants/app';
 import { replaceStrapiUrls } from '../../constants/url-utils';
+import { ArticleFiltersInput, CategoryArticlesArgs } from 'src/types';
 
 // Enum to translate article types to Vietnamese
 enum ArticleTypeEnum {
@@ -94,6 +95,35 @@ export class ArticleService {
         }
     `;
 
+    private readonly GET_ARTICLES_BY_CATEGORY = `
+        query ArticlesByCategory($filters: ArticleFiltersInput, $sort: [String], $pagination: PaginationArg) {
+            articles_connection(filters: $filters, sort: $sort, pagination: $pagination) {
+                nodes {
+                    description
+                    thumbnail {
+                        url
+                        alternativeText
+                        formats
+                    }
+                    categories {
+                      name
+                      slug
+                    }
+                    publishedAt
+                    slug
+                    type
+                    title
+                }
+                pageInfo {
+                    page
+                    pageCount
+                    pageSize
+                    total
+                }
+            }
+        }
+    `;
+
     /**
      * Process Elementor content to ensure it displays correctly
      * @param content Content from Elementor
@@ -142,7 +172,7 @@ export class ArticleService {
         return processedContent;
     }
 
-    async getRelatedArticles(variables: GetRelatedArticlesVariables = {}): Promise<ArticlesConnectionResponse['data']['articles_connection']['nodes']> {
+    async getRelatedArticles(variables: CategoryArticlesArgs | Record<string, any> = {}): Promise<ArticlesConnectionResponse['data']['articles_connection']['nodes']> {
         try {
             const graphqlClient = await initGraphQLClient();
             const response = await graphqlClient.request<ArticlesConnectionResponse>(this.GET_RELATED_ARTICLES, {
@@ -176,7 +206,7 @@ export class ArticleService {
         });
     }
 
-    async getArticleBySlug(variables: GetArticleBySlugVariables): Promise<ArticleBySlugResponse['data']['articles']> {
+    async getArticleBySlug(variables: {filters: ArticleFiltersInput}): Promise<ArticleBySlugResponse['data']['articles']> {
         try {
             if (!variables.filters || !variables.filters.slug) {
                 throw new Error('Slug filter is required to fetch article by slug');
@@ -237,5 +267,37 @@ export class ArticleService {
                 })
             }
         })
+    }
+
+    async getArtcleByCategory(categorySlug: string, variables: any = {}): Promise<ArticlesConnectionResponse['data']['articles_connection']['nodes']> {
+        try {
+            if (!categorySlug) {
+                throw new Error('Category slug is required to fetch articles by category');
+            }
+
+            const filters: ArticleFiltersInput = {
+                categories: {
+                    slug: {
+                        eq: categorySlug
+                    }
+                },
+                ...variables.filters
+            };
+
+            const graphqlClient = await initGraphQLClient();
+            const response = await graphqlClient.request<ArticlesConnectionResponse>(this.GET_ARTICLES_BY_CATEGORY, {
+                filters: filters,
+                sort: variables.sort || ["publishedAt:desc"],
+                pagination: variables.pagination || { limit: 12 }
+            });
+            
+            return response.data.articles_connection.nodes;
+        } catch (error) {
+            console.error('Error fetching articles by category:', error instanceof Error ? error.message : 'Unknown error');
+            if (error instanceof Error) {
+                throw new Error(`Failed to fetch articles by category: ${error.message}`);
+            }
+            throw new Error('Failed to fetch articles by category');
+        }
     }
 }

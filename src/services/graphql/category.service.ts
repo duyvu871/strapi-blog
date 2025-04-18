@@ -24,6 +24,23 @@ export class CategoryService {
         }
     `;
 
+    private readonly GET_CATEGORIES_BY_SLUG = `
+        query Category($filters: CategoryFiltersInput) {
+            categories(filters: $filters) {
+                createdAt
+                description
+                name
+                publishedAt
+                slug
+                thumbnail {
+                    formats
+                }
+                totalArticle
+                updatedAt
+            }
+        }
+    `;
+
     async getAllCategories(): Promise<PaginationCateGoriesResponse> {
         try {
             const graphqlClient = await initGraphQLClient();
@@ -45,6 +62,38 @@ export class CategoryService {
                 description: category.description,
                 slug: category.slug,
                 name: category.name
+            }
+        });
+        return categoriesParsed;
+    }
+
+    async getCategoriesBySlug(slug: string): Promise<QueryCategoriesResponse> {
+        try {
+            const graphqlClient = await initGraphQLClient();
+            const response = await graphqlClient.request<QueryCategoriesResponse>(this.GET_CATEGORIES_BY_SLUG, {
+                filters: {
+                    slug: {
+                        eq: slug
+                    }
+                }
+            });
+            return response;
+        } catch (error) {
+            console.error('Error fetching categories:', error instanceof Error ? error.message : 'Unknown error');
+            throw new Error('Failed to fetch categories');
+        }
+    }
+
+    parseCategoriesBySlug (categories: QueryCategoriesResponse) {
+        const categoriesParsed = categories.data.categories.map((category) => {
+            return {
+                thumbnail: `${STRAPI_BASE_HOST}${category.thumbnail.formats.large.url}`,
+                description: category.description,
+                slug: category.slug,
+                name: category.name,
+                totalArticle: category.totalArticle,
+                createdAt: category.createdAt,
+                updatedAt: category.updatedAt,
             }
         });
         return categoriesParsed;

@@ -193,6 +193,95 @@ app.get('/article/:slug', async (req, res) => {
     }
 });
 
+// Route cho trang category với slug
+app.get('/category/:slug', async (req, res) => {
+    try {
+        const { slug } = req.params;
+        
+        // Lấy thông tin danh mục từ slug
+        const category = await categoryService.getCategoriesBySlug(slug);
+        
+        // Nếu không tìm thấy danh mục, vẫn render trang nhưng với thông báo không tìm thấy
+        if (!category) {
+
+            // Lấy danh mục để hiển thị trên thanh navigation
+            return res.status(404).render('category', {
+                title: 'Không tìm thấy danh mục | Lĩnh Nam Dạ Thoại',
+                currentPath: req.path,
+                cssFiles: [
+                    'font.css',
+                    'theme.css',
+                    'nav.css',
+                    'style.css'
+                ],
+                meta: {
+                    description: 'Danh mục bạn đang tìm kiếm không tồn tại',
+                    keywords: 'không tìm thấy, danh mục, lĩnh nam dạ thoại',
+                    ogTitle: 'Không tìm thấy danh mục - Lĩnh Nam Dạ Thoại',
+                    ogDescription: 'Danh mục bạn đang tìm kiếm không tồn tại',
+                    ogUrl: `https://regisna.site/category/${slug}`
+                },
+                category: null,
+                articles: [],
+                categories: [],
+                fullUrl: null // Pass null for the full URL since the category was not found
+            });
+        }
+        
+        const parsedCategory = categoryService.parseCategoriesBySlug(category)[0];
+
+        // Lấy bài viết theo danh mục
+        const articlesData = await articleService.getArtcleByCategory(slug, {
+            sort: ['publishedAt:desc'],
+            pagination: {
+                limit: 12
+            }
+        });
+        
+        // Parse dữ liệu bài viết
+        const parsedArticles = articleService.articlesParse(articlesData);
+        
+        // Lấy danh mục để hiển thị trên thanh navigation
+        const categories = await categoryService.getAllCategories();
+        const categoriesParse = categoryService.categoriesParse(categories);
+        
+        // Tạo full URL cho tính năng chia sẻ
+        const host = req.get('host');
+        const protocol = req.protocol;
+        const fullUrl = `${protocol}://${host}/category/${slug}`;
+        
+        // Render trang danh mục
+        res.render('category', {
+            title: ` Lĩnh Nam Dạ Thoại`,
+            currentPath: req.path,
+            cssFiles: [
+                'font.css',
+                'theme.css',
+                'nav.css',
+                'style.css'
+            ],
+            meta: {
+                description: parsedCategory.description || `Các bài viết thuộc danh mục ${parsedCategory.name}`,
+                keywords: `${parsedCategory.name}, danh mục, lĩnh nam dạ thoại, regisna.site`,
+                ogTitle: `${parsedCategory.name} - Lĩnh Nam Dạ Thoại`,
+                ogDescription: parsedCategory.description || `Các bài viết thuộc danh mục ${parsedCategory.name}`,
+                ogImage: parsedCategory.thumbnail || '/assets/images/og-image.jpg',
+                ogUrl: `https://regisna.site/category/${slug}`
+            },
+            category: parsedCategory,
+            articles: parsedArticles,
+            categories: categoriesParse,
+            fullUrl: fullUrl // Pass the full URL for sharing
+        });
+    } catch (error) {
+        console.error('Error fetching category:', error);
+        res.status(500).render('error', {
+            title: 'Lỗi hệ thống | Lĩnh Nam Dạ Thoại',
+            message: 'Đã xảy ra lỗi khi tải danh mục. Vui lòng thử lại sau.'
+        });
+    }
+});
+
 // Global 404 handler - thêm trước phần khởi động server
 app.use((req, res) => {
     res.status(404).render('404', {

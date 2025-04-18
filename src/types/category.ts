@@ -24,6 +24,9 @@ export interface CategoryNode {
     description: null;
     slug:        string;
     name:        string;
+    totalArticle?: number;
+    updatedAt?:   string;
+    createdAt?: string;
 }
 
 export interface Thumbnail {
