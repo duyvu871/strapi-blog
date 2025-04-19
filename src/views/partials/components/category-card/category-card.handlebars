@@ -7,7 +7,7 @@ Sử dụng: {{> components/category-card/category-card title="Tiêu đề" imag
   x-data="{ hover: false }"
   x-on:mouseenter="hover = true"
   x-on:mouseleave="hover = false"
-  class="relative block cursor-pointer overflow-hidden rounded-2xl h-40 sm:h-full aspect-[4/6] group {{class}}"
+  class="category-card relative block cursor-pointer overflow-hidden rounded-2xl h-40 sm:h-full aspect-[4/6] group {{class}}"
 >
   {{#if thumbnail}}
     <img
