@@ -195,7 +195,7 @@ export class ArticleService {
                 ...article,
                 title: article.title,
                 thumbnail: article?.thumbnail ? {
-                    url: `${STRAPI_BASE_HOST}${article.thumbnail?.formats?.large.url || article.thumbnail.url}`,
+                    url: `${STRAPI_BASE_HOST}${article.thumbnail?.formats?.large?.url || article.thumbnail.url}`,
                     alt: article.thumbnail.alternativeText || article.title
                 } : null,
                 publishedAt: article.publishedAt,
