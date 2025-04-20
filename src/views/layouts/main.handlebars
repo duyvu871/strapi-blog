@@ -44,6 +44,7 @@
     {{#each cssFiles}}
     <link href="/style/{{this}}" rel="stylesheet">
     {{/each}}
+    <link rel="stylesheet" href="/style/sidebar-menu.css">
     {{!--
     <Link href="/style/font.css" rel="stylesheet">
     <link href="/style/theme.css" rel="stylesheet"> --}}
@@ -53,6 +54,9 @@
 <body class="min-h-screen bg-gray-50 flex flex-col font-body ">
     <!-- Header -->
     {{> header/header }}
+
+    <!-- Menu Sidebar -->
+    {{> menu/menu }}
 
     <!-- Main Content -->
     <main class="flex-grow">
@@ -74,6 +78,7 @@
     <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
     <!-- Scroll to top JS -->
     <script src="/script/scroll-to-top.js"></script>
+    <script src="/script/sidebar-menu.js"></script>
     <!-- Các JS tùy chỉnh -->
     {{#each jsFiles}}
     <script src="/script/{{this}}"></script>

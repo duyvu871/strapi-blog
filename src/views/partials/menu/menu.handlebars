@@ -1,3 +1,85 @@
-<div class="">
+<!-- Sidebar Menu Drawer -->
+<div id="sidebar-menu" class="sidebar-menu">
+  <div class="sidebar-header">
+    <div class="sidebar-logo">
+      <a href="/">
+        <img src="/assets/logo.svg" alt="Vietales Logo" class="sidebar-logo-img">
+      </a>
+    </div>
+    <button id="close-sidebar" class="close-sidebar">
+      <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <line x1="18" y1="6" x2="6" y2="18"></line>
+        <line x1="6" y1="6" x2="18" y2="18"></line>
+      </svg>
+    </button>
+  </div>
+  
+  <div class="sidebar-content">
+    <!-- Search Bar -->
+    <div class="sidebar-search">
+      <form action="/tim-kiem" method="GET" class="search-form">
+        <input type="text" name="q" placeholder="Tìm kiếm trong Viegazine..." class="search-input">
+        <button type="submit" class="search-button">
+          <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="11" cy="11" r="8"></circle>
+            <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+          </svg>
+        </button>
+      </form>
+    </div>
 
+    <!-- Main Navigation -->
+    <nav class="sidebar-nav">
+      <ul class="sidebar-nav-list">
+        <li class="sidebar-nav-item"><a href="/kham-pha" class="sidebar-nav-link">Khám phá</a></li>
+        <li class="sidebar-nav-item"><a href="/viegazine" class="sidebar-nav-link">Viegazine</a></li>
+        <li class="sidebar-nav-item"><a href="/comic" class="sidebar-nav-link">Comic</a></li>
+        <li class="sidebar-nav-item"><a href="/video" class="sidebar-nav-link">Video</a></li>
+        <li class="sidebar-nav-item"><a href="/podcast" class="sidebar-nav-link">Podcast</a></li>
+      </ul>
+    </nav>
+    
+    <!-- Categories -->
+    <div class="sidebar-section">
+      <h3 class="sidebar-section-title">Danh mục</h3>
+      <ul class="sidebar-category-list">
+        <li class="sidebar-category-item"><a href="/loai-chuyen" class="sidebar-category-link">Loại chuyện</a></li>
+        <li class="sidebar-category-item"><a href="/lich-su" class="sidebar-category-link">Lịch sử</a></li>
+        <li class="sidebar-category-item"><a href="/van-hoa" class="sidebar-category-link">Văn hóa</a></li>
+        <li class="sidebar-category-item"><a href="/dia-ly" class="sidebar-category-link">Địa lý</a></li>
+        <li class="sidebar-category-item"><a href="/sang-tac" class="sidebar-category-link">Sáng tác</a></li>
+      </ul>
+    </div>
+
+    <!-- Footer Links -->
+    <div class="sidebar-footer">
+      <div class="sidebar-social">
+        <a href="#" class="sidebar-social-link">
+          <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"></path>
+          </svg>
+        </a>
+        <a href="#" class="sidebar-social-link">
+          <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect>
+            <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path>
+            <line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line>
+          </svg>
+        </a>
+        <a href="#" class="sidebar-social-link">
+          <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M23 3a10.9 10.9 0 0 1-3.14 1.53 4.48 4.48 0 0 0-7.86 3v1A10.66 10.66 0 0 1 3 4s-4 9 5 13a11.64 11.64 0 0 1-7 2c9 5 20 0 20-11.5a4.5 4.5 0 0 0-.08-.83A7.72 7.72 0 0 0 23 3z"></path>
+          </svg>
+        </a>
+      </div>
+      <div class="sidebar-links">
+        <a href="/gioi-thieu" class="sidebar-footer-link">Giới thiệu</a>
+        <a href="/lien-he" class="sidebar-footer-link">Liên hệ</a>
+        <a href="/dieu-khoan" class="sidebar-footer-link">Điều khoản</a>
+      </div>
+    </div>
+  </div>
 </div>
+
+<!-- Overlay backdrop for sidebar -->
+<div id="sidebar-overlay" class="sidebar-overlay"></div>

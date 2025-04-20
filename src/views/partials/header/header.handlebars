@@ -10,13 +10,16 @@
     </div>
     <div class="container mx-auto px-4 h-full relative"> {{!-- Added px-4 and h-full --}}
         <div class="flex justify-between items-center h-full"> {{!-- Added h-full --}}
-            <nav>
-                {{!-- <ul class="flex space-x-6 text-white header-text">
-                    <li><a href="/" class="transition-colors hover:opacity-75">Trang chủ</a></li>
-                    <li><a href="/about" class="transition-colors hover:opacity-75">Giới thiệu</a></li>
-                </ul> --}}
-            </nav>
-            <a href="/" class="block h-full flex items-center"> {{!-- Added h-full flex items-center --}}
+            <div class="relative z-10 flex items-center"> {{!-- Added flex items-center --}}
+                <button id="open-sidebar" class="sidebar-toggle">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <line x1="3" y1="12" x2="21" y2="12"></line>
+                        <line x1="3" y1="6" x2="21" y2="6"></line>
+                        <line x1="3" y1="18" x2="21" y2="18"></line>
+                    </svg>
+                </button>
+            </div>
+            <a href="/" class="relative z-9 block h-full flex items-center overfollow-hidden"> {{!-- Added h-full flex items-center --}}
                 {{!-- Reduced height and adjusted viewBox accordingly, added max-h-full and scale-125 --}}
                 <svg class="logo max-h-full transition-all scale-[150%] md:scale-[200%] duration-300" xmlns="http://www.w3.org/2000/svg"
                     version="1.0" width="320px" height="80px" viewBox="0 0 840 230" preserveAspectRatio="xMidYMid meet">
@@ -45,8 +48,6 @@
                             d="M7189.6 1123.85c-26.6 -30.4 -29.45 -57 -8.55 -77.9 25.65 -25.65 62.7 -25.65 80.75 0.95 19.95 28.5 19 51.3 -3.8 74.1 -23.75 23.75 -49.4 24.7 -68.4 2.85" />
                     </g>
                 </svg>
-
-
             </a>
             <nav>
                 {{!-- <ul class="flex space-x-6 text-white header-text">

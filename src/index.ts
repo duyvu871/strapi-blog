@@ -82,7 +82,7 @@ app.get('/', async (req, res) => {
     const relatedArticle = await articleService.getRelatedArticles({
         sort: ['publishedAt:desc'],
         pagination: {
-            limit: 4,
+            limit: 8,
         },
     });
     console.log('categories: ', categories);
