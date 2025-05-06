@@ -10,9 +10,9 @@
 
         gtag('config', 'G-0X5TK8NGZ1');
     </script>
-
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{title}} | Lĩnh Nam Dạ Thoại</title>
     <meta name="description" content="{{meta.description}}">
     <meta name="keywords" content="{{meta.keywords}}">
     <meta property="og:title" content="{{meta.ogTitle}}">
@@ -20,7 +20,11 @@
     <meta property="og:image" content="{{meta.ogImage}}">
     <meta property="og:url" content="{{meta.ogUrl}}">
     <meta name="twitter:card" content="summary_large_image">
-    <title>{{title}} | Lĩnh Nam Dạ Thoại</title>
+    <meta property="og:type" content="website">
+
+    <!-- Thẻ Accessibility -->
+    <meta name="theme-color" content="#9333ea">
+    <meta name="color-scheme" content="light dark">
     <!-- Google tag (gtag.js) -->
     <!-- Google tag (gtag.js) -->
     <!-- Tailwind CSS từ CDN -->
@@ -45,9 +49,11 @@
     <link href="/style/{{this}}" rel="stylesheet">
     {{/each}}
     <link rel="stylesheet" href="/style/sidebar-menu.css">
-    {{!--
-    <Link href="/style/font.css" rel="stylesheet">
-    <link href="/style/theme.css" rel="stylesheet"> --}}
+    <!-- Favicon -->
+    <link rel="icon" href="/favicon.ico" sizes="any">
+    <link rel="icon" href="/assets/logo.svg" type="image/svg+xml">
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png">
+    <link rel="manifest" href="/site.webmanifest">
 
 </head>
 

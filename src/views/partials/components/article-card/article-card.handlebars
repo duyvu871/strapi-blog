@@ -3,7 +3,7 @@ Component Article Card - Thẻ hiển thị bài viết với hình ảnh, tiêu
 Sử dụng: {{> components/article-card/article-card ... }}
 --}}
 
-<a href="{{url}}" x-data="{ hover: false }" x-on:mouseenter="hover = true" x-on:mouseleave="hover = false" class="
+<a href="{{url}}"  aria-label="{{title}}" x-data="{ hover: false }" x-on:mouseenter="hover = true" x-on:mouseleave="hover = false" class="
     article-card block rounded-lg overflow-hidden bg-white shadow-sm hover:shadow-md transition-all duration-300 group
     {{#if (eq variant 'bordered')}}border border-gray-200{{/if}}
     {{class}}

@@ -12,3 +12,116 @@
     background-repeat: no-repeat;
 }
 
+/* Accessibility Helpers */
+.sr-only {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border-width: 0;
+}
+
+.sr-only-focusable:not(:focus) {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border-width: 0;
+}
+
+.sr-only-focusable:focus {
+    position: static;
+    width: auto;
+    height: auto;
+    padding: 0;
+    margin: 0;
+    overflow: visible;
+    clip: auto;
+    white-space: normal;
+}
+
+/* Enhanced focus styles */
+:focus-visible {
+    outline: 2px solid var(--primary, #9333ea);
+    outline-offset: 2px;
+}
+
+/* Improved form element accessibility */
+input, 
+button, 
+textarea, 
+select {
+    font-family: inherit;
+    font-size: inherit;
+    line-height: inherit;
+}
+
+/* Minimum touch target size of 44x44px for interactive elements */
+.touch-target {
+    min-height: 44px;
+    min-width: 44px;
+}
+
+/* Support for reduced motion */
+@media (prefers-reduced-motion: reduce) {
+    * {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+        scroll-behavior: auto !important;
+    }
+}
+
+/* High contrast mode adjustments */
+@media (forced-colors: active) {
+    .border-subtle {
+        border: 1px solid ButtonText;
+    }
+    
+    a {
+        text-decoration: underline;
+    }
+}
+
+/* Support for custom focus indicators in Windows high contrast mode */
+@media screen and (-ms-high-contrast: active) {
+    :focus {
+        outline: 2px solid transparent;
+        outline-offset: 2px;
+    }
+}
+
+/* Skip to main content link */
+.skip-to-main {
+    position: absolute;
+    top: -40px;
+    left: 0;
+    background: var(--primary, #9333ea);
+    color: white;
+    padding: 8px 16px;
+    z-index: 1200;
+    transition: top 0.3s;
+    text-decoration: none;
+    border-radius: 0 0 4px 0;
+}
+
+.skip-to-main:focus {
+    top: 0;
+    outline: none;
+}
+
+/* Increase text spacing for readability */
+.text-readable {
+    line-height: 1.6;
+    letter-spacing: 0.01em;
+    word-spacing: 0.05em;
+}
+

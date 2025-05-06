@@ -11,7 +11,7 @@
     <div class="container mx-auto px-4 h-full relative"> {{!-- Added px-4 and h-full --}}
         <div class="flex justify-between items-center h-full"> {{!-- Added h-full --}}
             <div class="relative z-10 flex items-center"> {{!-- Added flex items-center --}}
-                <button id="open-sidebar" class="sidebar-toggle">
+                <button id="open-sidebar" class="sidebar-toggle"  aria-label="Mở menu" type="button">
                     <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                         <line x1="3" y1="12" x2="21" y2="12"></line>
                         <line x1="3" y1="6" x2="21" y2="6"></line>
@@ -19,7 +19,7 @@
                     </svg>
                 </button>
             </div>
-            <a href="/" class="relative z-9 block h-full flex items-center overfollow-hidden"> {{!-- Added h-full flex items-center --}}
+            <a href="/" class="relative z-9 block h-full flex items-center overfollow-hidden" aria-label="Trang chủ"> {{!-- Added h-full flex items-center --}}
                 {{!-- Reduced height and adjusted viewBox accordingly, added max-h-full and scale-125 --}}
                 <svg class="logo max-h-full transition-all scale-[150%] md:scale-[200%] duration-300" xmlns="http://www.w3.org/2000/svg"
                     version="1.0" width="320px" height="80px" viewBox="0 0 840 230" preserveAspectRatio="xMidYMid meet">

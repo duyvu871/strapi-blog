@@ -4,21 +4,22 @@
   line-height: 1.8;
   padding: 1.5rem;
   border-radius: 0.5rem;
+  color: #333333; /* Đảm bảo độ tương phản màu text đủ cao */
 }
 
 .article-content * {
-    height: auto !important;
-    min-height: 0; /* Helps with Safari rendering */
-    max-height: none; /* Prevents Safari height constraints */
-    -webkit-height: auto !important; /* Safari-specific property */
+  height: auto !important;
+  min-height: 0; /* Helps with Safari rendering */
+  max-height: none; /* Prevents Safari height constraints */
+  -webkit-height: auto !important; /* Safari-specific property */
 }
 
 /* Fix for Safari flex container height issues */
 @supports (-webkit-appearance:none) {
-    .article-content .article-section {
-        height: fit-content;
-        min-height: fit-content;
-    }
+  .article-content .article-section {
+    height: fit-content;
+    min-height: fit-content;
+  }
 }
 
 /* Base typography styles */
@@ -31,8 +32,12 @@
   font-weight: 700;
   margin-top: 1.5em;
   margin-bottom: 0.75em;
+  color: #111111; /* Tăng độ tương phản màu cho heading */
+  line-height: 1.4; /* Cải thiện khả năng đọc cho headings */
+  letter-spacing: -0.01em; /* Cải thiện khả năng đọc */
 }
 
+/* Cải thiện kích thước heading để đảm bảo thứ bậc rõ ràng */
 .article-content h1 {
   font-size: 1.8rem;
 }
@@ -45,6 +50,21 @@
   font-size: 1.25rem;
 }
 
+.article-content h4 {
+  font-size: 1.125rem;
+}
+
+.article-content h5 {
+  font-size: 1rem;
+  font-weight: 700;
+}
+
+.article-content h6 {
+  font-size: 0.875rem;
+  font-weight: 700;
+  text-transform: uppercase;
+}
+
 .article-content p {
   margin-bottom: 1.5em;
 }
@@ -54,15 +74,33 @@
   height: auto;
   border-radius: 0.5rem;
   margin: 1.5em 0;
+  /* Cải thiện accessibility cho hình ảnh */
+  display: block;
+}
+
+/* Đảm bảo tất cả các hình ảnh đều có alt text thích hợp */
+.article-content img:not([alt]),
+.article-content img[alt=""] {
+  outline: 2px dashed #ff0000;
+  outline-offset: 2px;
 }
 
 .article-content a {
   color: #0066cc;
   text-decoration: underline;
+  text-underline-offset: 2px; /* Cải thiện độ rõ của gạch chân */
+  transition: color 0.2s;
 }
 
 .article-content a:hover {
-  text-decoration: none;
+  color: #004499;
+}
+
+/* Cải thiện khả năng tiếp cận cho focus */
+.article-content a:focus-visible {
+  outline: 3px solid rgba(0, 102, 204, 0.5);
+  outline-offset: 2px;
+  border-radius: 2px;
 }
 
 .article-content blockquote {
@@ -70,6 +108,7 @@
   padding-left: 1rem;
   font-style: italic;
   margin: 1.5em 0;
+  color: #444444; /* Tăng độ tương phản cho text blockquote */
 }
 
 .article-content ul, 
@@ -81,6 +120,41 @@
 .article-content ul li, 
 .article-content ol li {
   margin-bottom: 0.5em;
+}
+
+/* Cải thiện độ tương phản cho danh sách */
+.article-content ul li::marker,
+.article-content ol li::marker {
+  color: #555555;
+}
+
+/* Cải thiện bảng */
+.article-content table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 1.5em 0;
+  overflow-x: auto;
+  display: block; /* Cho phép cuộn ngang trên thiết bị nhỏ */
+}
+
+.article-content table th,
+.article-content table td {
+  border: 1px solid #dddddd;
+  padding: 0.75rem;
+  text-align: left;
+}
+
+.article-content table th {
+  background-color: #f7f7f7;
+  font-weight: 600;
+}
+
+/* Cải thiện độ tương phản cho các thành phần tương tác */
+.article-content button,
+.article-content input,
+.article-content select,
+.article-content textarea {
+  border: 1px solid #555555; /* Đảm bảo viền đủ rõ */
 }
 
 /* Social sharing styles */
@@ -129,6 +203,7 @@
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
   border: none;
   font-size: 0.875rem;
+  position: relative; /* Thêm position relative để hỗ trợ ::after */
 }
 
 .share-popup-btn svg {
@@ -157,6 +232,12 @@
 
 .share-popup-btn:active {
   transform: translateY(1px);
+}
+
+/* Cải thiện khả năng tiếp cận focus cho các nút */
+.share-popup-btn:focus-visible {
+  outline: 3px solid rgba(255, 255, 255, 0.5);
+  outline-offset: 2px;
 }
 
 @media (max-width: 640px) {
@@ -218,6 +299,15 @@
   cursor: pointer;
 }
 
+/* Cải thiện focus cho form elements */
+.article-content form input:focus-visible,
+.article-content form textarea:focus-visible,
+.article-content form select:focus-visible,
+.article-content form button:focus-visible {
+  outline: 3px solid rgba(0, 102, 204, 0.5);
+  outline-offset: 2px;
+}
+
 /* Additional Elementor components */
 .article-content .elementor-button {
   display: inline-block;
@@ -265,4 +355,39 @@
   .article-content h3 {
     font-size: 1.1rem;
   }
+}
+
+/* High contrast mode support */
+@media (forced-colors: active) {
+  .article-content a {
+    text-decoration: underline !important;
+  }
+  
+  .article-content img {
+    border: 1px solid ButtonText;
+  }
+}
+
+/* Reduced motion preference */
+@media (prefers-reduced-motion: reduce) {
+  .article-content * {
+    transition-duration: 0.001ms !important;
+    animation-duration: 0.001ms !important;
+  }
+}
+
+/* Skip to content link */
+.skip-to-content {
+  position: absolute;
+  left: -9999px;
+  top: 1em;
+  z-index: 9999;
+  background: #0066cc;
+  color: white;
+  padding: 0.5em 1em;
+  transition: left 0.1s ease-out;
+}
+
+.skip-to-content:focus {
+  left: 1em;
 }

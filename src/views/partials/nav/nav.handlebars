@@ -16,11 +16,12 @@
         <ul class="hidden md:flex flex-col md:flex-row md:justify-center md:space-x-8 md:space-y-0 space-y-4 py-4 text-base md:text-[24px] leading-[24px] typo-title-font italic font-normal" 
             :class="{'!flex': isOpen}" 
             id="main-nav">
-            <li><a href="/" class="nav-item block text-gray-700 hover:text-black hover:underline hover:decoration-yellow-400 transition-colors {{#if (eq currentPath '/')}}nav-active underline decoration-yellow-400{{/if}}" data-path="/">Khám phá</a></li>
-            <li><a href="/viegazine" class="nav-item block text-gray-700 hover:text-black hover:underline hover:decoration-yellow-400 transition-colors {{#if (eq currentPath '/viegazine')}}nav-active underline decoration-yellow-400{{/if}}" data-path="/viegazine">Viegazine</a></li>
-            <li><a href="/comic" class="nav-item block text-gray-700 hover:text-black hover:underline hover:decoration-yellow-400 transition-colors {{#if (eq currentPath '/comic')}}nav-active underline decoration-yellow-400{{/if}}" data-path="/comic">Comic</a></li>
-            <li><a href="/video" class="nav-item block text-gray-700 hover:text-black hover:underline hover:decoration-yellow-400 transition-colors {{#if (eq currentPath '/video')}}nav-active underline decoration-yellow-400{{/if}}" data-path="/video">Video</a></li>
-            <li><a href="/podcast" class="nav-item block text-gray-700 hover:text-black hover:underline hover:decoration-yellow-400 transition-colors {{#if (eq currentPath '/podcast')}}nav-active underline decoration-yellow-400{{/if}}" data-path="/podcast">Podcast</a></li>
+            <li><a 
+            href="/" class="nav-item block text-gray-700 hover:text-black hover:underline hover:decoration-yellow-400 transition-colors {{#if (eq currentPath '/')}}nav-active underline decoration-yellow-400{{/if}}" data-path="/" aria-label="Trang chủ">Khám phá</a></li>
+            <li><a href="/viegazine" class="nav-item block text-gray-700 hover:text-black hover:underline hover:decoration-yellow-400 transition-colors {{#if (eq currentPath '/viegazine')}}nav-active underline decoration-yellow-400{{/if}}" data-path="/viegazine" aria-label="Viegazine">Viegazine</a></li>
+            <li><a href="/comic" class="nav-item block text-gray-700 hover:text-black hover:underline hover:decoration-yellow-400 transition-colors {{#if (eq currentPath '/comic')}}nav-active underline decoration-yellow-400{{/if}}" data-path="/comic" aria-label="Comic">Comic</a></li>
+            <li><a href="/video" class="nav-item block text-gray-700 hover:text-black hover:underline hover:decoration-yellow-400 transition-colors {{#if (eq currentPath '/video')}}nav-active underline decoration-yellow-400{{/if}}" data-path="/video" aria-label="Video">Video</a></li>
+            <li><a href="/podcast" class="nav-item block text-gray-700 hover:text-black hover:underline hover:decoration-yellow-400 transition-colors {{#if (eq currentPath '/podcast')}}nav-active underline decoration-yellow-400{{/if}}" data-path="/podcast" aria-label="Podcast">Podcast</a></li>
         </ul>
     </div>
 </nav>

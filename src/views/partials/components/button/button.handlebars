@@ -5,7 +5,7 @@ class="my-custom-class"}}
 Các variant: primary, secondary, outline, danger, success, link
 --}}
 
-<button {{#if id}}id="{{id}}" {{/if}} type="{{type}}" x-data="{ hover: false }" x-on:mouseenter="hover = true"
+<button  aria-label="Nút bấm" {{#if id}}id="{{id}}" {{/if}} type="{{type}}" x-data="{ hover: false }" x-on:mouseenter="hover = true"
     x-on:mouseleave="hover = false" x-on:click="{{onClick}}" {{#if disabled}}disabled{{/if}} class="
     inline-flex items-center justify-center px-4 py-2 transition-all duration-200 focus:outline-none focus:ring-0 focus:ring-offset-0
     {{~#if (eq variant 'primary')}}

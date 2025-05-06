@@ -4,6 +4,7 @@ Sử dụng: {{> components/category-card/category-card title="Tiêu đề" imag
 --}}
 <a
   href="/category/{{slug}}"
+  aria-label="Danh mục {{name}}"
   x-data="{ hover: false }"
   x-on:mouseenter="hover = true"
   x-on:mouseleave="hover = false"
@@ -12,7 +13,8 @@ Sử dụng: {{> components/category-card/category-card title="Tiêu đề" imag
   {{#if thumbnail}}
     <img
       src="{{thumbnail}}"
-      alt="{{name}}"
+      alt="{{name}}-alt"
+      aria-label="Danh mục {{name}}"
       class="absolute inset-0 w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
     >
     <div class="absolute inset-0 bg-black/40 group-hover:bg-black/50 transition-colors duration-300"></div>
