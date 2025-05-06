@@ -1,6 +1,7 @@
 import { initGraphQLClient } from './graphql-client';
 import { PaginationCateGoriesResponse, QueryCategoriesResponse } from '../../types/category';
 import { STRAPI_BASE_HOST } from '../../constants/app';
+import { cacheService } from '../cache';
 
 export class CategoryService {
     private readonly GET_CATEGORIES = `
@@ -41,10 +42,31 @@ export class CategoryService {
         }
     `;
 
+    // Cache keys
+    private readonly CACHE_KEY_ALL_CATEGORIES = 'all_categories';
+    private readonly CACHE_KEY_CATEGORY_BY_SLUG = 'category_by_slug_';
+    
+    // Cache TTL values (in seconds)
+    private readonly CACHE_TTL_CATEGORIES = 3600; // 1 hour for categories
+
     async getAllCategories(): Promise<PaginationCateGoriesResponse> {
         try {
+            // Check if data exists in cache
+            const cachedData = cacheService.get<PaginationCateGoriesResponse>(this.CACHE_KEY_ALL_CATEGORIES);
+            
+            if (cachedData) {
+                console.log('Categories fetched from cache');
+                return cachedData;
+            }
+            
+            // If not in cache, fetch from API
             const graphqlClient = await initGraphQLClient();
             const response = await graphqlClient.request<PaginationCateGoriesResponse>(this.GET_CATEGORIES);
+            
+            // Store in cache
+            cacheService.set(this.CACHE_KEY_ALL_CATEGORIES, response, this.CACHE_TTL_CATEGORIES);
+            console.log('Categories fetched from API and cached');
+            
             return response;
         } catch (error) {
             console.error('Error fetching categories:', error instanceof Error ? error.message : 'Unknown error');
@@ -69,6 +91,18 @@ export class CategoryService {
 
     async getCategoriesBySlug(slug: string): Promise<QueryCategoriesResponse> {
         try {
+            // Create a unique cache key for this slug
+            const cacheKey = `${this.CACHE_KEY_CATEGORY_BY_SLUG}${slug}`;
+            
+            // Check if data exists in cache
+            const cachedData = cacheService.get<QueryCategoriesResponse>(cacheKey);
+            
+            if (cachedData) {
+                console.log(`Category by slug '${slug}' fetched from cache`);
+                return cachedData;
+            }
+            
+            // If not in cache, fetch from API
             const graphqlClient = await initGraphQLClient();
             const response = await graphqlClient.request<QueryCategoriesResponse>(this.GET_CATEGORIES_BY_SLUG, {
                 filters: {
@@ -77,6 +111,11 @@ export class CategoryService {
                     }
                 }
             });
+            
+            // Store in cache
+            cacheService.set(cacheKey, response, this.CACHE_TTL_CATEGORIES);
+            console.log(`Category by slug '${slug}' fetched from API and cached`);
+            
             return response;
         } catch (error) {
             console.error('Error fetching categories:', error instanceof Error ? error.message : 'Unknown error');

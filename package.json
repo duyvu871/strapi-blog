@@ -42,6 +42,7 @@
         "helmet": "8.1.0",
         "https-proxy-agent": "^7.0.2",
         "morgan": "^1.10.0",
+        "node-cache": "^5.1.2",
         "puppeteer-extra": "^3.3.6",
         "puppeteer-extra-plugin-anonymize-ua": "^2.4.6",
         "puppeteer-extra-plugin-recaptcha": "^3.6.8",

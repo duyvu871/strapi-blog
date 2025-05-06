@@ -3,6 +3,7 @@ import { ArticleBySlugResponse, ArticlesConnectionResponse, GetArticleBySlugVari
 import { STRAPI_BASE_HOST } from '../../constants/app';
 import { replaceStrapiUrls } from '../../constants/url-utils';
 import { ArticleFiltersInput, CategoryArticlesArgs } from 'src/types';
+import { cacheService } from '../cache';
 
 // Enum to translate article types to Vietnamese
 enum ArticleTypeEnum {
@@ -124,6 +125,33 @@ export class ArticleService {
         }
     `;
 
+    // Cache keys
+    private readonly CACHE_KEY_RELATED_ARTICLES = 'related_articles_';
+    private readonly CACHE_KEY_ARTICLE_BY_SLUG = 'article_by_slug_';
+    private readonly CACHE_KEY_ARTICLES_BY_CATEGORY = 'articles_by_category_';
+    
+    // Cache TTL values (in seconds)
+    private readonly CACHE_TTL_ARTICLES = 900; // 15 minutes for articles
+    private readonly CACHE_TTL_ARTICLE_DETAIL = 1800; // 30 minutes for article details
+
+    /**
+     * Create a cache key for related articles based on sort and pagination parameters
+     */
+    private getRelatedArticlesCacheKey(variables: any): string {
+        const sort = variables.sort ? variables.sort.join('_') : 'default';
+        const limit = variables.pagination?.limit || 'default';
+        return `${this.CACHE_KEY_RELATED_ARTICLES}${sort}_${limit}`;
+    }
+
+    /**
+     * Create a cache key for articles by category based on slug and parameters
+     */
+    private getArticlesByCategoryCacheKey(slug: string, variables: any): string {
+        const sort = variables.sort ? variables.sort.join('_') : 'default';
+        const limit = variables.pagination?.limit || 'default';
+        return `${this.CACHE_KEY_ARTICLES_BY_CATEGORY}${slug}_${sort}_${limit}`;
+    }
+
     /**
      * Process Elementor content to ensure it displays correctly
      * @param content Content from Elementor
@@ -174,11 +202,28 @@ export class ArticleService {
 
     async getRelatedArticles(variables: CategoryArticlesArgs | Record<string, any> = {}): Promise<ArticlesConnectionResponse['data']['articles_connection']['nodes']> {
         try {
+            // Generate cache key based on request parameters
+            const cacheKey = this.getRelatedArticlesCacheKey(variables);
+            
+            // Check if data exists in cache
+            const cachedData = cacheService.get<ArticlesConnectionResponse['data']['articles_connection']['nodes']>(cacheKey);
+            
+            if (cachedData) {
+                console.log('Related articles fetched from cache');
+                return cachedData;
+            }
+            
+            // If not in cache, fetch from API
             const graphqlClient = await initGraphQLClient();
             const response = await graphqlClient.request<ArticlesConnectionResponse>(this.GET_RELATED_ARTICLES, {
                 sort: variables.sort || ["publishedAt:desc"],
                 pagination: variables.pagination || { limit: 1 }
             });
+            
+            // Store in cache
+            cacheService.set(cacheKey, response.data.articles_connection.nodes, this.CACHE_TTL_ARTICLES);
+            console.log('Related articles fetched from API and cached');
+            
             return response.data.articles_connection.nodes;
         } catch (error) {
             console.error('Error fetching related articles:', error instanceof Error ? error.message : 'Unknown error');
@@ -211,10 +256,29 @@ export class ArticleService {
             if (!variables.filters || !variables.filters.slug) {
                 throw new Error('Slug filter is required to fetch article by slug');
             }
+            
+            // Create a cache key based on the slug
+            const slug = variables.filters.slug.eq;
+            const cacheKey = `${this.CACHE_KEY_ARTICLE_BY_SLUG}${slug}`;
+            
+            // Check if data exists in cache
+            const cachedData = cacheService.get<ArticleBySlugResponse['data']['articles']>(cacheKey);
+            
+            if (cachedData) {
+                console.log(`Article by slug '${slug}' fetched from cache`);
+                return cachedData;
+            }
+            
+            // If not in cache, fetch from API
             const graphqlClient = await initGraphQLClient();
             const response = await graphqlClient.request<ArticleBySlugResponse>(this.GET_ARTICLE_BY_SLUG, {
                 filters: variables.filters
             });
+            
+            // Store in cache
+            cacheService.set(cacheKey, response.data.articles, this.CACHE_TTL_ARTICLE_DETAIL);
+            console.log(`Article by slug '${slug}' fetched from API and cached`);
+            
             return response.data.articles;
         } catch (error) {
             console.error('Error fetching article by slug:', error instanceof Error ? error.message : 'Unknown error');
@@ -275,6 +339,17 @@ export class ArticleService {
                 throw new Error('Category slug is required to fetch articles by category');
             }
 
+            // Create a cache key based on the category slug and query parameters
+            const cacheKey = this.getArticlesByCategoryCacheKey(categorySlug, variables);
+            
+            // Check if data exists in cache
+            const cachedData = cacheService.get<ArticlesConnectionResponse['data']['articles_connection']['nodes']>(cacheKey);
+            
+            if (cachedData) {
+                console.log(`Articles for category '${categorySlug}' fetched from cache`);
+                return cachedData;
+            }
+
             const filters: ArticleFiltersInput = {
                 categories: {
                     slug: {
@@ -290,6 +365,10 @@ export class ArticleService {
                 sort: variables.sort || ["publishedAt:desc"],
                 pagination: variables.pagination || { limit: 12 }
             });
+            
+            // Store in cache
+            cacheService.set(cacheKey, response.data.articles_connection.nodes, this.CACHE_TTL_ARTICLES);
+            console.log(`Articles for category '${categorySlug}' fetched from API and cached`);
             
             return response.data.articles_connection.nodes;
         } catch (error) {
