@@ -2,6 +2,7 @@
     class="related-post h-screen-no-bars md:h-screen--sub-menu bg-align-cover relative" 
     {{!-- Thêm thuộc tính loading=lazy để ngăn chặn việc tải ảnh chưa hiển thị --}}
     {{!-- Sử dụng data-bg thay vì trực tiếp style để hoãn tải hình ảnh --}}
+    style="background-image: url(&quot;{{image}}&quot;);" 
     data-bg="{{image}}"
     data-ll-status="loading"
     >
