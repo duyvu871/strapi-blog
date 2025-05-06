@@ -1,0 +1,16 @@
+{{!--
+Main Comics Page - Shows all comic series
+--}}
+
+<div class="comics-page">
+  <section class="py-12 bg-gradient-to-b from-purple-100 to-white">
+    <div class="container mx-auto px-4">
+      <div class="text-center">
+        <h1 class="text-4xl md:text-6xl font-tiempos-headline italic text-purple-600 mb-4">Comic Series</h1>
+        <p class="text-lg text-gray-600 max-w-2xl mx-auto">Khám phá các series truyện tranh độc đáo và hấp dẫn</p>
+      </div>
+    </div>
+  </section>
+
+  {{> components/comic-list/comic-list comics=comics title="Tất cả Comic Series" }}
+</div>

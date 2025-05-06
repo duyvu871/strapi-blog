@@ -1,0 +1,84 @@
+/* Comic Series Styles */
+
+/* Comic Card */
+.comic-card {
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.comic-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+}
+
+/* Comic detail page */
+.comic-detail-page .episode-content {
+  max-width: 100%;
+  margin: 0 auto;
+  overflow: hidden;
+}
+
+.comic-detail-page .episode-content img {
+  max-width: 100%;
+  height: auto;
+}
+
+/* Comic episodes list */
+.episode-list-item {
+  border-left: 3px solid transparent;
+  transition: border-color 0.3s ease, background-color 0.3s ease;
+}
+
+.episode-list-item:hover {
+  border-left-color: var(--primary);
+  background-color: rgba(137, 23, 238, 0.05);
+}
+
+/* Comic page header */
+.comic-page-header {
+  background: linear-gradient(135deg, var(--primary) 0%, #6B13B6 100%);
+  color: white;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .comic-card {
+    height: 200px;
+  }
+}
+
+/* Comic series grid animation */
+.comics-grid-appear {
+  opacity: 0;
+  transform: translateY(20px);
+}
+
+.comics-grid-appear-active {
+  opacity: 1;
+  transform: translateY(0);
+  transition: opacity 0.3s ease, transform 0.3s ease;
+}
+
+/* Comic episode content styling */
+.episode-content h1, 
+.episode-content h2, 
+.episode-content h3,
+.episode-content h4,
+.episode-content h5,
+.episode-content h6 {
+  color: var(--article-primary);
+  margin-top: 1.5em;
+  margin-bottom: 0.5em;
+  font-family: var(--font-tiempos-headline);
+}
+
+.episode-content p {
+  margin-bottom: 1em;
+  line-height: 1.6;
+}
+
+.episode-content blockquote {
+  padding: 0.5em 1em;
+  margin: 1em 0;
+  border-left: 4px solid var(--secondary);
+  background-color: rgba(243, 230, 255, 0.3);
+}

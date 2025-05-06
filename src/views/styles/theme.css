@@ -1,3 +1,4 @@
+/* Base theme variables */
 body, .theme-default {
     --secondary: #F3E6FF;
     --onSecondary: #6B13B6;
@@ -5,4 +6,96 @@ body, .theme-default {
     --on-tertiary: #6B13B6;
     --onPrimary: #FAFAFA;
     --primary: #8917EE;
+    
+    /* Article theme variables */
+    --article-primary: #0066cc;
+    --article-secondary: #4CAF50;
+    --article-background: #ffffff;
+    --article-text: #333333;
+}
+
+/* Theme variations for content */
+.theme-default {
+    --article-primary: #0066cc;
+    --article-secondary: #4CAF50;
+    --article-background: #ffffff;
+    --article-text: #333333;
+}
+
+.theme-dark {
+    --article-primary: #4a90e2;
+    --article-secondary: #6ac289;
+    --article-background: #282c35;
+    --article-text: #f8f8f2;
+}
+
+.theme-light {
+    --article-primary: #0066cc;
+    --article-secondary: #4CAF50;
+    --article-background: #f9f9f9;
+    --article-text: #292929;
+}
+
+.theme-sepia {
+    --article-primary: #704214;
+    --article-secondary: #986c41;
+    --article-background: #f4ecd8;
+    --article-text: #5b4636;
+}
+
+/* Common theme styles for elements */
+.article-content {
+    background-color: var(--article-background);
+    color: var(--article-text);
+}
+
+.article-content h1,
+.article-content h2,
+.article-content h3,
+.article-content h4,
+.article-content h5,
+.article-content h6 {
+    color: var(--article-text);
+}
+
+.article-content a {
+    color: var(--article-primary);
+}
+
+.article-content a:hover {
+    color: var(--article-secondary);
+}
+
+/* Apply theme colors to Elementor elements using classes instead of inline styles */
+.article-content .elementor-button-wrapper a,
+.article-content .elementor-button {
+    background-color: var(--article-primary);
+    color: white;
+}
+
+.article-content .elementor-heading-title {
+    color: var(--article-text);
+}
+
+/* Mobile optimizations */
+@media (max-width: 768px) {
+    /* Use hardware acceleration for smoother rendering on mobile */
+    .article-content {
+        transform: translateZ(0);
+        backface-visibility: hidden;
+        perspective: 1000px;
+        will-change: transform;
+    }
+    
+    /* Simplify transitions on mobile */
+    .article-content * {
+        transition: none !important;
+        animation: none !important;
+    }
+    
+    /* Optimize background rendering */
+    .article-content .article-section,
+    .article-content .article-column {
+        background-attachment: scroll !important;
+    }
 }

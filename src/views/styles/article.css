@@ -4,7 +4,8 @@
   line-height: 1.8;
   padding: 1.5rem;
   border-radius: 0.5rem;
-  color: #333333; /* Đảm bảo độ tương phản màu text đủ cao */
+  /* Use theme variable instead of hardcoded color */
+  color: var(--article-text);
 }
 
 .article-content * {
@@ -12,6 +13,13 @@
   min-height: 0; /* Helps with Safari rendering */
   max-height: none; /* Prevents Safari height constraints */
   -webkit-height: auto !important; /* Safari-specific property */
+}
+
+.article-content img,
+.article-content iframe,
+.article-content video {
+  height: auto !important;
+  max-width: 100%;
 }
 
 /* Fix for Safari flex container height issues */
@@ -32,38 +40,19 @@
   font-weight: 700;
   margin-top: 1.5em;
   margin-bottom: 0.75em;
-  color: #111111; /* Tăng độ tương phản màu cho heading */
+  /* Use theme variable instead of hardcoded color */
+  color: var(--article-text);
   line-height: 1.4; /* Cải thiện khả năng đọc cho headings */
   letter-spacing: -0.01em; /* Cải thiện khả năng đọc */
 }
 
-/* Cải thiện kích thước heading để đảm bảo thứ bậc rõ ràng */
-.article-content h1 {
-  font-size: 1.8rem;
-}
-
-.article-content h2 {
-  font-size: 1.5rem;
-}
-
-.article-content h3 {
-  font-size: 1.25rem;
-}
-
-.article-content h4 {
-  font-size: 1.125rem;
-}
-
-.article-content h5 {
-  font-size: 1rem;
-  font-weight: 700;
-}
-
-.article-content h6 {
-  font-size: 0.875rem;
-  font-weight: 700;
-  text-transform: uppercase;
-}
+/* Simplify responsive font sizes */
+.article-content h1 { font-size: clamp(1.5rem, 5vw, 1.8rem); }
+.article-content h2 { font-size: clamp(1.3rem, 4vw, 1.5rem); }
+.article-content h3 { font-size: clamp(1.1rem, 3vw, 1.25rem); }
+.article-content h4 { font-size: clamp(1rem, 2.5vw, 1.125rem); }
+.article-content h5 { font-size: 1rem; font-weight: 700; }
+.article-content h6 { font-size: 0.875rem; font-weight: 700; text-transform: uppercase; }
 
 .article-content p {
   margin-bottom: 1.5em;
@@ -74,7 +63,9 @@
   height: auto;
   border-radius: 0.5rem;
   margin: 1.5em 0;
-  /* Cải thiện accessibility cho hình ảnh */
+  /* Optimize images with content-visibility for off-screen images */
+  content-visibility: auto;
+  contain-intrinsic-size: auto 300px;
   display: block;
 }
 
@@ -86,14 +77,16 @@
 }
 
 .article-content a {
-  color: #0066cc;
+  /* Use theme variable instead of hardcoded color */
+  color: var(--article-primary);
   text-decoration: underline;
   text-underline-offset: 2px; /* Cải thiện độ rõ của gạch chân */
   transition: color 0.2s;
 }
 
 .article-content a:hover {
-  color: #004499;
+  /* Use theme variable instead of hardcoded color */
+  color: var(--article-secondary);
 }
 
 /* Cải thiện khả năng tiếp cận cho focus */
@@ -258,6 +251,7 @@
   flex-wrap: wrap;
   margin-bottom: 2rem;
   width: 100%;
+  contain: layout style; /* Optimize layout performance */
 }
 
 .article-content .article-column {
@@ -342,6 +336,24 @@
   
   .article-content .article-column {
     width: 100%;
+  }
+  
+  /* Use passive event listeners for touch events */
+  .article-content {
+    touch-action: pan-y;
+  }
+  
+  /* Optimize paint operations */
+  .article-content * {
+    will-change: auto; /* Reset will-change to avoid excessive memory usage */
+  }
+  
+  /* Optimize expensive animations */
+  .article-content .elementor-animation-wobble-horizontal,
+  .article-content .elementor-animation-pulse,
+  .article-content .elementor-animation-bob,
+  .article-content [class*="elementor-animation-"] {
+    animation: none !important;
   }
   
   .article-content h1 {

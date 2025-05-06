@@ -6,6 +6,7 @@ import { helpers } from './helpers';
 import { mockSwiper } from './mock/series';
 import { CategoryService } from './services/graphql/category.service';
 import { ArticleService } from './services/graphql/article.service';
+import { ComicService } from './services/comicService';
 import helmet from 'helmet';
 import { log } from 'console';
 
@@ -15,6 +16,7 @@ const PORT = process.env.PORT || 3000;
 
 const categoryService = new CategoryService();
 const articleService = new ArticleService();
+const comicService = new ComicService();
 
 // Sử dụng Morgan middleware để ghi log HTTP requests
 app.use(morgan('dev'));
@@ -279,6 +281,120 @@ app.get('/category/:slug', async (req, res) => {
         res.status(500).render('error', {
             title: 'Lỗi hệ thống | Lĩnh Nam Dạ Thoại',
             message: 'Đã xảy ra lỗi khi tải danh mục. Vui lòng thử lại sau.'
+        });
+    }
+});
+
+// Route cho trang comic series giới thiệu tất cả các series
+app.get('/comics', async (req, res) => {
+    try {
+        // Lấy tất cả comic series
+        const comicSeries = await ComicService.getAllComicSeries(1, 20);
+        
+        // Lấy danh mục để hiển thị trên thanh navigation
+        const categories = await categoryService.getAllCategories();
+        const categoriesParse = categoryService.categoriesParse(categories);
+        
+        // Tạo full URL cho tính năng chia sẻ
+        const host = req.get('host');
+        const protocol = req.protocol;
+        const fullUrl = `${protocol}://${host}/comics`;
+        
+        // Render trang comics
+        res.render('comics', {
+            title: 'Comic Series | Lĩnh Nam Dạ Thoại',
+            currentPath: req.path,
+            cssFiles: [
+                'font.css',
+                'theme.css',
+                'nav.css',
+                'style.css'
+            ],
+            meta: {
+                description: 'Khám phá các series truyện tranh độc đáo và hấp dẫn',
+                keywords: 'comic, series, truyện tranh, lĩnh nam dạ thoại',
+                ogTitle: 'Comic Series - Lĩnh Nam Dạ Thoại',
+                ogDescription: 'Khám phá các series truyện tranh độc đáo và hấp dẫn',
+                ogImage: '/assets/images/og-image.jpg',
+                ogUrl: `https://regisna.site/comics`
+            },
+            comics: comicSeries,
+            categories: categoriesParse,
+            fullUrl: fullUrl
+        });
+    } catch (error) {
+        console.error('Error fetching comic series:', error);
+        res.status(500).render('error', {
+            title: 'Lỗi hệ thống | Lĩnh Nam Dạ Thoại',
+            message: 'Đã xảy ra lỗi khi tải comic series. Vui lòng thử lại sau.'
+        });
+    }
+});
+
+// Route cho trang chi tiết comic series với slug
+app.get('/comic/:slug', async (req, res) => {
+    try {
+        const { slug } = req.params;
+        
+        // Lấy thông tin comic series từ slug
+        const comic = await ComicService.getComicBySlug(slug);
+        
+        // Nếu không tìm thấy comic series, trả về trang 404
+        if (!comic) {
+            return res.status(404).render('404', {
+                title: 'Không tìm thấy comic series | Lĩnh Nam Dạ Thoại',
+                cssFiles: [
+                    'font.css',
+                    'theme.css',
+                    'nav.css',
+                    'style.css'
+                ],
+                meta: {
+                    description: 'Comic series bạn đang tìm kiếm không tồn tại',
+                    keywords: 'không tìm thấy, comic series, error, lĩnh nam dạ thoại',
+                    ogTitle: 'Không tìm thấy comic series - Lĩnh Nam Dạ Thoại',
+                    ogDescription: 'Comic series bạn đang tìm kiếm không tồn tại',
+                    ogUrl: `https://regisna.site/comic/${slug}`
+                }
+            });
+        }
+        
+        // Lấy danh mục để hiển thị trên thanh navigation
+        const categories = await categoryService.getAllCategories();
+        const categoriesParse = categoryService.categoriesParse(categories);
+        
+        // Tạo full URL cho tính năng chia sẻ
+        const host = req.get('host');
+        const protocol = req.protocol;
+        const fullUrl = `${protocol}://${host}/comic/${slug}`;
+        
+        // Render trang chi tiết comic series
+        res.render('comic-detail', {
+            title: `${comic.title} | Comic Series | Lĩnh Nam Dạ Thoại`,
+            currentPath: req.path,
+            cssFiles: [
+                'font.css',
+                'theme.css',
+                'nav.css',
+                'style.css'
+            ],
+            meta: {
+                description: comic.description || comic.title,
+                keywords: `${comic.title}, comic series, truyện tranh, lĩnh nam dạ thoại`,
+                ogTitle: `${comic.title} - Comic Series - Lĩnh Nam Dạ Thoại`,
+                ogDescription: comic.description || comic.title,
+                ogImage: comic.thumbnail?.formats?.medium?.url || '/assets/images/og-image.jpg',
+                ogUrl: `https://regisna.site/comic/${slug}`
+            },
+            comic: comic,
+            categories: categoriesParse,
+            fullUrl: fullUrl
+        });
+    } catch (error) {
+        console.error('Error fetching comic series:', error);
+        res.status(500).render('error', {
+            title: 'Lỗi hệ thống | Lĩnh Nam Dạ Thoại',
+            message: 'Đã xảy ra lỗi khi tải comic series. Vui lòng thử lại sau.'
         });
     }
 });
