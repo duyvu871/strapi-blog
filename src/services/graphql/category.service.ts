@@ -87,7 +87,7 @@ export class CategoryService {
     parseCategoriesBySlug (categories: QueryCategoriesResponse) {
         const categoriesParsed = categories.data.categories.map((category) => {
             return {
-                thumbnail: `${STRAPI_BASE_HOST}${category.thumbnail.formats.large.url}`,
+                thumbnail: `${STRAPI_BASE_HOST}${category.thumbnail.formats.medium.url}`,
                 description: category.description,
                 slug: category.slug,
                 name: category.name,
