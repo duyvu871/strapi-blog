@@ -52,6 +52,7 @@
         "puppeteer-extra-plugin-recaptcha": "^3.6.8",
         "puppeteer-extra-plugin-stealth": "^2.11.2",
         "puppeteer-extra-plugin-user-preferences": "^2.4.1",
+        "sharp": "^0.34.1",
         "user-agents": "^1.1.504",
         "useragent": "^2.3.0"
     },

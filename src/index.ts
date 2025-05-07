@@ -70,8 +70,8 @@ app.use('/style', express.static(path.join(process.cwd(), 'src/views/styles')));
 app.use('/static/fonts', express.static(path.join(process.cwd(), 'public/fonts')));
 app.use('/images', express.static(path.join(process.cwd(), 'public/images')));
 app.use('/assets', express.static(path.join(process.cwd(), 'public/assets')));
-app.get('/favicon.ico', express.static(path.join(process.cwd(), 'public/favicon.ico')));
-app.get('/robots.txt', express.static(path.join(process.cwd(), 'public/robots.txt')));
+app.use('/favicon.ico', express.static(path.join(process.cwd(), 'public/favicon.ico')));
+app.use('/robots.txt', express.static(path.join(process.cwd(), 'public/robots.txt')));
 app.use('/site.webmanifest', express.static(path.join(process.cwd(), 'public/site.webmanifest')));
 
 // Route cho trang demo component
@@ -114,18 +114,20 @@ app.get('/components', async (req, res) => {
 // Routes
 app.get('/', async (req, res) => {
     const categories = await categoryService.getAllCategories();
-    const relatedArticle = await articleService.getRelatedArticles({
+    const articles = await articleService.getRelatedArticles({
         sort: ['publishedAt:desc'],
         pagination: {
             limit: 8,
         },
     });
-    console.log('categories: ', categories);
-    console.log('relatedArticle', relatedArticle);
+    // console.log('categories: ');
+    console.log('relatedArticle', articles.map((item) => item.thumbnail.formats));
     const categoriesParse = categoryService.categoriesParse(categories);
-    const parsedRelatedArticle = articleService.articlesParse(relatedArticle);
-    console.log('categoriesParse', categoriesParse);
-    console.log('relatedArticleWithBaseUrl', parsedRelatedArticle);
+    const parsedRelatedArticle = articleService.articlesParse(articles);
+    const relatedArticle = articleService.parseRelatedArticles([articles[0]]);
+    console.log('relatedArticleWithBaseUrl', relatedArticle);
+    // console.log('categoriesParse', categoriesParse);
+    // console.log('relatedArticleWithBaseUrl', parsedRelatedArticle);
     res.render('home', {
         title: 'Lĩnh Nam Dạ Thoại - Trang chủ',
         currentPath: req.path,
@@ -145,7 +147,7 @@ app.get('/', async (req, res) => {
             ogUrl: 'https://regisna.site'
         },
         categories: categoriesParse,
-        relatedArticle: parsedRelatedArticle[0],
+        relatedArticle: relatedArticle[0],
         articles: parsedRelatedArticle.slice(1),
     });
 });

@@ -62,6 +62,7 @@ export class ArticleService {
                     thumbnail {
                         url
                         alternativeText
+                        formats
                     }
                     categories {
                       name,
@@ -343,6 +344,23 @@ export class ArticleService {
         });
     }
 
+    parseRelatedArticles(data: ArticlesConnectionResponse['data']['articles_connection']['nodes']) {
+        return data.map(article => {
+            return {
+                ...article,
+                title: article.title,
+                thumbnail: article?.thumbnail ? {
+                    url: `${STRAPI_BASE_HOST}${article.thumbnail.url || article.thumbnail?.formats?.large?.url}`,
+                    alt: article.thumbnail.alternativeText || article.title
+                } : null,
+                publishedAt: article.publishedAt,
+                slug: article.slug,
+                type: article.type ? ArticleTypeEnum[article.type as keyof typeof ArticleTypeEnum] || article.type : '',
+                url: `/article/${article.slug}`
+            }
+        });
+    }
+
     async getArticleBySlug(variables: { filters: ArticleFiltersInput }): Promise<ArticleBySlugResponse['data']['articles']> {
         try {
             if (!variables.filters || !variables.filters.slug) {
@@ -383,7 +401,7 @@ export class ArticleService {
 
     articlesParseBySlug(data: ArticleBySlugResponse['data']['articles']) {
         return data.map(article => {
-            const thumbnailUrl = article?.thumbnail?.formats?.large?.url;
+            const thumbnailUrl = article?.thumbnail?.formats?.small?.url;
             const theme = article.theme || 'default';
 
             // Process content with Elementor styling
