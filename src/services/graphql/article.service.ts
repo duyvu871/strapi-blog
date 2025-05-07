@@ -332,7 +332,7 @@ export class ArticleService {
                 ...article,
                 title: article.title,
                 thumbnail: article?.thumbnail ? {
-                    url: `${STRAPI_BASE_HOST}${article.thumbnail?.formats?.medium?.url || article.thumbnail.url}`,
+                    url: `${STRAPI_BASE_HOST}${article.thumbnail?.formats?.small?.url || article.thumbnail.url}`,
                     alt: article.thumbnail.alternativeText || article.title
                 } : null,
                 publishedAt: article.publishedAt,
