@@ -1,0 +1,44 @@
+{{!--
+Viegazine Page - Displays all articles with pagination
+--}}
+
+<div class="my-12 sm:my-28"></div>
+
+{{> nav/nav}}
+
+<div class="container mx-auto px-4 py-8 my-8">
+    <div class="mb-12 text-center">
+        <h1 class="text-4xl md:text-6xl typo-title-font italic text-purple-600 font-thin">Viegazine</h1>
+        <p class="mt-4 text-lg text-gray-600">Tổng hợp tất cả bài viết từ Lĩnh Nam Dạ Thoại</p>
+    </div>
+
+    {{#if articles.length}}
+        <section class="mb-12">
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                {{#each articles}}
+                    {{> components/article-card/article-card 
+                        title=this.title 
+                        excerpt=this.description 
+                        image=this.thumbnail.url 
+                        imageAlt=this.thumbnail.alt
+                        type=this.type
+                        category=this.categories.name
+                        publishDate=(formatDate this.publishedAt)
+                        url=(concat "/article/" this.slug)
+                    }}
+                {{/each}}
+            </div>
+        </section>
+
+        {{!-- Pagination --}}
+        {{#if paginationHTML}}
+            <div class="mt-12 flex justify-center">
+                {{{paginationHTML}}} {{! Use triple-stash for unescaped HTML }}
+            </div>
+        {{/if}}
+    {{else}}
+        <div class="text-center py-16">
+            <p class="text-lg text-gray-600">Chưa có bài viết nào.</p>
+        </div>
+    {{/if}}
+</div>

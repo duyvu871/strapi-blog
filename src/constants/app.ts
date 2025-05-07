@@ -1,1 +1,1 @@
-export const STRAPI_BASE_HOST = process.env.BASE_HOST || 'http://localhost:1337'
+export const STRAPI_BASE_HOST = process.env.BASE_HOST || 'https://cms.regisna.site'//'http://localhost:1337'

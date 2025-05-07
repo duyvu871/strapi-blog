@@ -1,0 +1,194 @@
+{{!--
+Component Pagination - Hiển thị điều khiển phân trang
+Sử dụng: {{> components/pagination/pagination pagination=pagination}}
+
+Yêu cầu pagination có cấu trúc:
+{
+  totalItems: số lượng item tổng cộng,
+  currentPage: trang hiện tại,
+  itemsPerPage: số item trên một trang,
+  totalPages: tổng số trang,
+  hasNextPage: có trang tiếp theo không,
+  hasPreviousPage: có trang trước đó không
+}
+--}}
+
+<nav class="pagination" role="navigation" aria-label="Phân trang">
+  <div class="flex items-center justify-center flex-wrap gap-2 py-6">
+    {{#if pagination}}
+      <!-- Previous Page Button -->
+      {{#if pagination.hasPreviousPage}}
+        <a 
+          href="{{addPageParam (currentUrl) (subtract pagination.currentPage 1)}}" 
+          class="flex items-center justify-center px-3 py-2 border border-gray-300 text-sm rounded-md text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-purple-500"
+          aria-label="Trang trước">
+          <svg class="h-5 w-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+            <path fill-rule="evenodd" d="M12.707 5.293a1 1 0 010 1.414L9.414 10l3.293 3.293a1 1 0 01-1.414 1.414l-4-4a1 1 0 010-1.414l4-4a1 1 0 011.414 0z" clip-rule="evenodd" />
+          </svg>
+          <span class="sr-only md:not-sr-only md:ml-2">Trước</span>
+        </a>
+      {{else}}
+        <span
+          class="flex items-center justify-center px-3 py-2 border border-gray-300 text-sm rounded-md text-gray-400 bg-gray-100 cursor-not-allowed"
+          aria-disabled="true">
+          <svg class="h-5 w-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+            <path fill-rule="evenodd" d="M12.707 5.293a1 1 0 010 1.414L9.414 10l3.293 3.293a1 1 0 01-1.414 1.414l-4-4a1 1 0 010-1.414l4-4a1 1 0 011.414 0z" clip-rule="evenodd" />
+          </svg>
+          <span class="sr-only md:not-sr-only md:ml-2">Trước</span>
+        </span>
+      {{/if}}
+
+      <!-- Page Numbers -->
+      {{#lessThan pagination.totalPages 8}}
+        <!-- Less than 8 pages: show all page numbers -->
+        {{#each (range 1 pagination.totalPages)}}
+          {{#eq this ../pagination.currentPage}}
+            <span
+              aria-current="page"
+              class="z-10 bg-purple-600 text-white relative inline-flex items-center justify-center px-4 py-2 border text-sm font-medium rounded-md">
+              {{this}}
+            </span>
+          {{else}}
+            <a
+              href="{{addPageParam (currentUrl) this}}"
+              class="bg-white border-gray-300 text-gray-700 hover:bg-gray-50 relative inline-flex items-center justify-center px-4 py-2 border text-sm font-medium rounded-md">
+              {{this}}
+            </a>
+          {{/eq}}
+        {{/each}}
+      {{else}}
+        <!-- More than 7 pages: show ellipsis -->
+        <!-- First page -->
+        <a
+          href="{{addPageParam (currentUrl) 1}}"
+          class="{{#eq 1 pagination.currentPage}}z-10 bg-purple-600 text-white{{else}}bg-white border-gray-300 text-gray-700 hover:bg-gray-50{{/eq}} relative inline-flex items-center justify-center px-4 py-2 border text-sm font-medium rounded-md">
+          1
+        </a>
+
+        <!-- Ellipsis or page 2 -->
+        {{#greaterThan pagination.currentPage 3}}
+          <span class="relative inline-flex items-center px-4 py-2 border border-gray-300 bg-white text-sm font-medium text-gray-700 rounded-md">
+            ...
+          </span>
+        {{else}}
+          <a
+            href="{{addPageParam (currentUrl) 2}}"
+            class="{{#eq 2 pagination.currentPage}}z-10 bg-purple-600 text-white{{else}}bg-white border-gray-300 text-gray-700 hover:bg-gray-50{{/eq}} relative inline-flex items-center justify-center px-4 py-2 border text-sm font-medium rounded-md">
+            2
+          </a>
+        {{/greaterThan}}
+
+        <!-- Middle pages -->
+        {{#each (pageRange pagination.currentPage pagination.totalPages) as |page|}}
+          {{#greaterThan page 2}}
+            <a
+              href="{{addPageParam (currentUrl) page}}"
+              class="{{#eq page pagination.currentPage}}z-10 bg-purple-600 text-white{{else}}bg-white border-gray-300 text-gray-700 hover:bg-gray-50{{/eq}} relative inline-flex items-center justify-center px-4 py-2 border text-sm font-medium rounded-md">
+              {{page}}
+            </a>
+          {{/greaterThan}}
+        {{/each}}
+
+        <!-- Ellipsis or second-last page -->
+        {{#lessThan pagination.currentPage (subtract pagination.totalPages 2)}}
+          <span class="relative inline-flex items-center px-4 py-2 border border-gray-300 bg-white text-sm font-medium text-gray-700 rounded-md">
+            ...
+          </span>
+        {{else}}
+          <a
+            href="{{addPageParam (currentUrl) (subtract pagination.totalPages 1)}}"
+            class="{{#eq (subtract pagination.totalPages 1) pagination.currentPage}}z-10 bg-purple-600 text-white{{else}}bg-white border-gray-300 text-gray-700 hover:bg-gray-50{{/eq}} relative inline-flex items-center justify-center px-4 py-2 border text-sm font-medium rounded-md">
+            {{subtract pagination.totalPages 1}}
+          </a>
+        {{/lessThan}}
+
+        <!-- Last page -->
+        <a
+          href="{{addPageParam (currentUrl) pagination.totalPages}}"
+          class="{{#eq pagination.totalPages pagination.currentPage}}z-10 bg-purple-600 text-white{{else}}bg-white border-gray-300 text-gray-700 hover:bg-gray-50{{/eq}} relative inline-flex items-center justify-center px-4 py-2 border text-sm font-medium rounded-md">
+          {{pagination.totalPages}}
+        </a>
+      {{/lessThan}}
+
+      <!-- Next Page Button -->
+      {{#if pagination.hasNextPage}}
+        <a
+          href="{{addPageParam (currentUrl) (add pagination.currentPage 1)}}"
+          class="flex items-center justify-center px-3 py-2 border border-gray-300 text-sm rounded-md text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-purple-500"
+          aria-label="Trang kế tiếp">
+          <span class="sr-only md:not-sr-only md:mr-2">Sau</span>
+          <svg class="h-5 w-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+            <path fill-rule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clip-rule="evenodd" />
+          </svg>
+        </a>
+      {{else}}
+        <span
+          class="flex items-center justify-center px-3 py-2 border border-gray-300 text-sm rounded-md text-gray-400 bg-gray-100 cursor-not-allowed"
+          aria-disabled="true">
+          <span class="sr-only md:not-sr-only md:mr-2">Sau</span>
+          <svg class="h-5 w-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+            <path fill-rule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clip-rule="evenodd" />
+          </svg>
+        </span>
+      {{/if}}
+      
+      <!-- Page info -->
+      <div class="text-sm text-gray-600 ml-2">
+        Trang {{pagination.currentPage}} / {{pagination.totalPages}}
+      </div>
+    {{/if}}
+  </div>
+</nav>
+
+<script>
+  // Kiểm tra script helpers đã được load chưa
+  if (typeof window.paginationHelpers === 'undefined') {
+    window.paginationHelpers = {
+      /**
+       * Thêm hoặc cập nhật tham số page vào URL
+       * @param {string} url - URL hiện tại
+       * @param {number} pageNum - Số trang muốn đến
+       * @returns {string} URL mới với tham số page được cập nhật
+       */
+      addPageParam: function(url, pageNum) {
+        try {
+          const urlObj = new URL(url, window.location.origin);
+          urlObj.searchParams.set('page', pageNum);
+          return urlObj.pathname + urlObj.search;
+        } catch (e) {
+          console.error('Error updating URL:', e);
+          return url;
+        }
+      },
+      
+      /**
+       * Tạo mảng số trang xung quanh trang hiện tại
+       * @param {number} currentPage - Trang hiện tại
+       * @param {number} totalPages - Tổng số trang
+       * @returns {Array} Mảng số trang để hiển thị
+       */
+      pageRange: function(currentPage, totalPages) {
+        const range = [];
+        const delta = 1; // Số trang hiển thị ở mỗi bên
+        
+        let start = Math.max(2, currentPage - delta);
+        let end = Math.min(totalPages - 1, currentPage + delta);
+        
+        // Điều chỉnh để luôn hiển thị cố định 3 trang ở giữa
+        if (end - start < 2 && totalPages > 4) {
+          if (currentPage - start < end - currentPage) {
+            end = Math.min(totalPages - 1, start + 2);
+          } else {
+            start = Math.max(2, end - 2);
+          }
+        }
+        
+        for (let i = start; i <= end; i++) {
+          range.push(i);
+        }
+        
+        return range;
+      }
+    };
+  }
+</script>

@@ -2,84 +2,89 @@
 <div class="container mx-auto py-8 px-4">
     <div class="max-w-4xl mx-auto my-20">
         {{#if article}}
-            <div class="mb-6">
-                <span class="text-sm text-gray-500">{{article.type}}</span>
-                <h1 class="text-3xl md:text-4xl font-semibold mb-4 typo-title-font">{{article.title}}</h1>
-                {{#if article.description}}
-                    <p class="text-gray-700 mb-6">{{article.description}}</p>
-                {{/if}}
-                
-                {{!-- Social Sharing Buttons (Top) --}}
-                <div class="flex items-center space-x-4 mb-6">
-                    <span class="text-sm text-gray-600">Chia sẻ:</span>
-                    <a href="https://www.facebook.com/sharer/sharer.php?u={{fullUrl}}" 
-                       target="_blank" 
-                       rel="noopener noreferrer"
-                       onclick="window.open(this.href, 'facebook-share', 'width=580,height=296'); return false;">
-                       <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-6 h-6">
-<path d="M9.68 20.01v-7.9H7.55V9.01h2.13V6.59c0-2.11 1.28-3.95 4.24-3.95 1.2 0 2.09.09 2.37.13v2.75h-1.63c-1.27 0-1.52.6-1.52 1.49v1.99h3.04l-.4 3.1h-2.64v7.9H9.68z"/>
+        <div class="mb-6 text-gray-800">
+            <span class="text-sm text-gray-500">{{article.type}}</span>
+            <h1 class="text-3xl md:text-4xl font-semibold mb-4 typo-title-font">{{article.title}}</h1>
+            {{#if article.description}}
+            <p class="text-gray-700 mb-6">{{article.description}}</p>
+            {{/if}}
+
+            {{!-- Social Sharing Buttons (Top) --}}
+            <div class="flex items-center space-x-4 mb-6">
+                <span class="text-sm text-gray-600">Chia sẻ:</span>
+                <a href="https://www.facebook.com/sharer/sharer.php?u={{fullUrl}}" target="_blank"
+                    rel="noopener noreferrer"
+                    onclick="window.open(this.href, 'facebook-share', 'width=580,height=296'); return false;">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-6 h-6">
+                        <path
+                            d="M9.68 20.01v-7.9H7.55V9.01h2.13V6.59c0-2.11 1.28-3.95 4.24-3.95 1.2 0 2.09.09 2.37.13v2.75h-1.63c-1.27 0-1.52.6-1.52 1.49v1.99h3.04l-.4 3.1h-2.64v7.9H9.68z" />
                     </svg>
-                    </a>
-                </div>
-                
-                {{#if article.thumbnail}}
-                    <div class="mb-8">
-                        <img 
-                            src="{{article.thumbnail.url}}" 
-                            alt="{{article.thumbnail.alt}}" 
-                            class="w-full h-auto rounded-lg"
-                        >
-                    </div>
+                </a>
+            </div>
+
+            {{#if article.thumbnail}}
+            <div class="mb-8">
+                <img src="{{article.thumbnail.url}}" alt="{{article.thumbnail.alt}}" class="w-full h-auto rounded-lg">
+            </div>
+            {{/if}}
+
+            <div class="text-sm text-gray-500 mb-8">
+                <span>Đăng ngày: {{formatDate article.publishedAt}}</span>
+            </div>
+
+            <div class="article-content prose prose-lg max-w-none"
+                style="background-color: {{article.themeColors}}; padding: 1rem; border-radius: 0.5rem;">
+                {{#if article.contentProcessed}}
+                {{{article.contentProcessed}}}
+                {{else if article.contentful}}
+                {{{article.contentful}}}
+                {{else}}
+                {{{article.content}}}
                 {{/if}}
-                
-                <div class="text-sm text-gray-500 mb-8">
-                    <span>Đăng ngày: {{formatDate article.publishedAt}}</span>
-                </div>
-                
-                <div class="article-content prose prose-lg max-w-none" style="background-color: {{article.themeColors}}; padding: 1rem; border-radius: 0.5rem;">
-                    {{#if article.contentProcessed}}
-                        {{{article.contentProcessed}}}
-                    {{else if article.contentful}}
-                        {{{article.contentful}}}
-                    {{else}}
-                        {{{article.content}}}
-                    {{/if}}
-                </div>
-                
-                {{!-- Social Sharing Bottom --}}
-                <div class="mt-8 pt-6 border-t border-gray-200">
-                    <div class="flex flex-col sm:flex-row items-center justify-between">
-                        <p class="text-gray-600 mb-4 sm:mb-0">Nếu bạn thích bài viết này, hãy chia sẻ cho bạn bè:</p>
-                        <div class="flex flex-wrap gap-3">
-                            <a href="https://www.facebook.com/sharer/sharer.php?u={{fullUrl}}" 
-                               target="_blank" 
-                               rel="noopener noreferrer"
-                               onclick="window.open(this.href, 'facebook-share', 'width=580,height=296'); return false;">
-                                {{> components/button/button 
-                                    variant="primary" 
-                                    radius="md"
-                                    text="Chia sẻ Facebook"
-                                    icon='<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-5 h-5"><path d="M9.68 20.01v-7.9H7.55V9.01h2.13V6.59c0-2.11 1.28-3.95 4.24-3.95 1.2 0 2.09.09 2.37.13v2.75h-1.63c-1.27 0-1.52.6-1.52 1.49v1.99h3.04l-.4 3.1h-2.64v7.9H9.68z"/></svg>'
-                                }}
-                            </a>
-                            
-                            <button class="copy-link-btn" onclick="navigator.clipboard.writeText('{{fullUrl}}').then(() => { document.querySelector('.copy-feedback').textContent = 'Đã sao chép!'; setTimeout(() => { document.querySelector('.copy-feedback').textContent = 'Sao chép liên kết'; }, 2000); })">
-                                {{> components/button/button 
-                                    variant="outline" 
-                                    radius="md"
-                                    text="Sao chép liên kết" 
-                                    class="copy-feedback"
-                                    icon='<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5"><path stroke-linecap="round" stroke-linejoin="round" d="M13.19 8.688a4.5 4.5.0 011.242 7.244l-4.5 4.5a4.5 4.5.0 01-6.364-6.364l1.757-1.757m13.35-.622l1.757-1.757a4.5 4.5 0 00-6.364-6.364l-4.5 4.5a4.5 4.5 0 001.242 7.244" /></svg>'
-                                }}
-                            </button>
-                        </div>
+            </div>
+
+            {{!-- Social Sharing Bottom --}}
+            <div class="mt-8 pt-6 border-t border-gray-200">
+                <div class="flex flex-col sm:flex-row items-center justify-between">
+                    <p class="text-gray-600 mb-4 sm:mb-0">Nếu bạn thích bài viết này, hãy chia sẻ cho bạn bè:</p>
+                    <div class="flex flex-wrap gap-3">
+                        <a href="https://www.facebook.com/sharer/sharer.php?u={{fullUrl}}" target="_blank"
+                            rel="noopener noreferrer"
+                            onclick="window.open(this.href, 'facebook-share', 'width=580,height=296'); return false;">
+                            {{> components/button/button
+                            variant="primary"
+                            radius="md"
+                            text="Chia sẻ Facebook"
+                            icon='<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"
+                                class="w-5 h-5">
+                                <path
+                                    d="M9.68 20.01v-7.9H7.55V9.01h2.13V6.59c0-2.11 1.28-3.95 4.24-3.95 1.2 0 2.09.09 2.37.13v2.75h-1.63c-1.27 0-1.52.6-1.52 1.49v1.99h3.04l-.4 3.1h-2.64v7.9H9.68z" />
+                            </svg>'
+                            }}
+                        </a>
+
+                        <button class="copy-link-btn"
+                            onclick="navigator.clipboard.writeText('{{fullUrl}}').then(() => { document.querySelector('.copy-feedback').textContent = 'Đã sao chép!'; setTimeout(() => { document.querySelector('.copy-feedback').textContent = 'Sao chép liên kết'; }, 2000); })">
+                            {{> components/button/button
+                            variant="outline"
+                            radius="md"
+                            text="Sao chép liên kết"
+                            class="copy-feedback"
+                            icon='<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+                                stroke-width="1.5" stroke="currentColor" class="w-5 h-5">
+                                <path stroke-linecap="round" stroke-linejoin="round"
+                                    d="M13.19 8.688a4.5 4.5.0 011.242 7.244l-4.5 4.5a4.5 4.5.0 01-6.364-6.364l1.757-1.757m13.35-.622l1.757-1.757a4.5 4.5 0 00-6.364-6.364l-4.5 4.5a4.5 4.5 0 001.242 7.244" />
+                            </svg>'
+                            }}
+                        </button>
                     </div>
                 </div>
             </div>
+        </div>
         {{else}}
-            <div class="text-center py-12">
-                <p>Không tìm thấy bài viết</p>
-            </div>
+        <div class="text-center py-12">
+            <p>Không tìm thấy bài viết</p>
+        </div>
         {{/if}}
     </div>
 </div>

@@ -1,0 +1,67 @@
+<div class="container mx-auto px-4 py-8 my-20">
+    <div class="mb-12 text-center">
+        {{#if query}}
+            <h1 class="text-4xl md:text-6xl typo-title-font italic text-purple-600 font-thin">
+                Kết quả tìm kiếm cho "{{query}}"
+            </h1>
+        {{else}}
+            <h1 class="text-4xl md:text-6xl typo-title-font italic text-purple-600 font-thin">
+                Tìm kiếm bài viết
+            </h1>
+        {{/if}}
+    </div>
+
+    {{#if message}}
+        <div class="text-center py-16">
+            <p class="text-lg text-gray-600">{{message}}</p>
+            {{#unless query}}
+                {{!-- Optionally, add a search form here if query is empty --}}
+                <div class="mt-8 max-w-md mx-auto">
+                    <form action="/tim-kiem" method="GET" class="flex items-center border border-gray-300 rounded-md overflow-hidden shadow-sm">
+                        <input type="text" name="q" placeholder="Nhập từ khóa..." class="px-4 py-3 w-full focus:outline-none focus:ring-2 focus:ring-purple-500" aria-label="Tìm kiếm">
+                        <button type="submit" class="px-6 py-3 bg-purple-600 text-white hover:bg-purple-700 focus:outline-none focus:ring-2 focus:ring-purple-500" aria-label="Tìm kiếm">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <circle cx="11" cy="11" r="8"></circle>
+                                <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+                            </svg>
+                        </button>
+                    </form>
+                </div>
+            {{/unless}}
+        </div>
+    {{/if}}
+
+    {{#if articles.length}}
+        <section class="mb-12">
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                {{#each articles}}
+                    {{> components/article-card/article-card 
+                        title=this.title 
+                        excerpt=this.description 
+                        image=this.thumbnail.url 
+                        imageAlt=this.thumbnail.alt
+                        type=this.type
+                        category=this.categories.name
+                        publishDate=(formatDate this.publishedAt)
+                        url=(concat "/article/" this.slug)
+                    }}
+                {{/each}}
+            </div>
+        </section>
+
+        {{!-- Pagination --}}
+        {{#if paginationHTML}}
+            <div class="mt-12">
+                {{{paginationHTML}}} {{! Use triple-stash for unescaped HTML }}
+            </div>
+        {{/if}}
+    {{else}}
+        {{#if query}}
+            {{#unless message}} {{!-- Show this only if there was a query but no articles and no specific error message --}}
+                <div class="text-center py-16">
+                    <p class="text-lg text-gray-600">Không tìm thấy bài viết nào phù hợp với từ khóa "{{query}}".</p>
+                </div>
+            {{/unless}}
+        {{/if}}
+    {{/if}}
+</div>

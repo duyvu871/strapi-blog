@@ -55,9 +55,9 @@
 }
 
 /* Improved form element accessibility */
-input, 
-button, 
-textarea, 
+input,
+button,
+textarea,
 select {
     font-family: inherit;
     font-size: inherit;
@@ -85,7 +85,7 @@ select {
     .border-subtle {
         border: 1px solid ButtonText;
     }
-    
+
     a {
         text-decoration: underline;
     }
@@ -125,3 +125,14 @@ select {
     word-spacing: 0.05em;
 }
 
+/* Thêm vào file CSS của sidebar menu */
+.sidebar-menu {
+    overscroll-behavior: contain;
+}
+
+/* Cho các phần tử có scroll khác */
+.modal-content,
+.popup-content,
+.dropdown-menu {
+    overscroll-behavior: contain;
+}

@@ -38,6 +38,14 @@
                 {{/each}}
             </div>
         </section>
+
+        {{!-- Pagination --}}
+        {{#if paginationHTML}}
+            <div class="mt-12">
+                {{{paginationHTML}}} {{! Use triple-stash for unescaped HTML }}
+            </div>
+        {{/if}}
+
     {{else}}
         {{#if category}}
             <div class="text-center py-16">

@@ -1,4 +1,4 @@
-<nav class="bg-background" x-data="{ isOpen: false }">
+<nav class="bg-background " x-data="{ isOpen: false }">
     <div class="container mx-auto px-4">
         <!-- Mobile menu button -->
         <div class="flex md:hidden justify-end py-4">
@@ -19,9 +19,9 @@
             <li><a 
             href="/" class="nav-item block text-gray-700 hover:text-black hover:underline hover:decoration-yellow-400 transition-colors {{#if (eq currentPath '/')}}nav-active underline decoration-yellow-400{{/if}}" data-path="/" aria-label="Trang chủ">Khám phá</a></li>
             <li><a href="/viegazine" class="nav-item block text-gray-700 hover:text-black hover:underline hover:decoration-yellow-400 transition-colors {{#if (eq currentPath '/viegazine')}}nav-active underline decoration-yellow-400{{/if}}" data-path="/viegazine" aria-label="Viegazine">Viegazine</a></li>
-            <li><a href="/comic" class="nav-item block text-gray-700 hover:text-black hover:underline hover:decoration-yellow-400 transition-colors {{#if (eq currentPath '/comic')}}nav-active underline decoration-yellow-400{{/if}}" data-path="/comic" aria-label="Comic">Comic</a></li>
-            <li><a href="/video" class="nav-item block text-gray-700 hover:text-black hover:underline hover:decoration-yellow-400 transition-colors {{#if (eq currentPath '/video')}}nav-active underline decoration-yellow-400{{/if}}" data-path="/video" aria-label="Video">Video</a></li>
-            <li><a href="/podcast" class="nav-item block text-gray-700 hover:text-black hover:underline hover:decoration-yellow-400 transition-colors {{#if (eq currentPath '/podcast')}}nav-active underline decoration-yellow-400{{/if}}" data-path="/podcast" aria-label="Podcast">Podcast</a></li>
+            <li><a href="/comics" class="nav-item block text-gray-700 hover:text-black hover:underline hover:decoration-yellow-400 transition-colors {{#if (eq currentPath '/comics')}}nav-active underline decoration-yellow-400{{/if}}" data-path="/comics" aria-label="Comic">Comic</a></li>
+            <!-- <li><a href="/video" class="nav-item block text-gray-700 hover:text-black hover:underline hover:decoration-yellow-400 transition-colors {{#if (eq currentPath '/video')}}nav-active underline decoration-yellow-400{{/if}}" data-path="/video" aria-label="Video">Video</a></li> -->
+            <!-- <li><a href="/podcast" class="nav-item block text-gray-700 hover:text-black hover:underline hover:decoration-yellow-400 transition-colors {{#if (eq currentPath '/podcast')}}nav-active underline decoration-yellow-400{{/if}}" data-path="/podcast" aria-label="Podcast">Podcast</a></li> -->
         </ul>
     </div>
 </nav>

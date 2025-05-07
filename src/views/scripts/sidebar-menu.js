@@ -26,6 +26,9 @@ document.addEventListener('DOMContentLoaded', function() {
   // Phát hiện thiết bị iOS để xử lý đặc biệt
   const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
   
+  // Lưu vị trí scroll khi mở menu
+  let scrollPosition = 0;
+  
   // Thông báo cho người dùng đang sử dụng trình đọc màn hình
   const announceToScreenReader = (message) => {
     let announcement = document.getElementById('a11y-announcement');
@@ -42,8 +45,38 @@ document.addEventListener('DOMContentLoaded', function() {
     announcement.textContent = message;
   };
   
+  // Phương pháp mạnh mẽ hơn để ngăn cuộn trang - ngăn sự kiện wheel và touchmove
+  function preventScroll(e) {
+    // Kiểm tra xem sự kiện có bắt nguồn từ menu hay không
+    const isFromMenu = e.target.closest('#sidebar-menu');
+    
+    if (!isFromMenu) {
+      // Nếu không phải từ menu, chặn sự kiện
+      e.preventDefault();
+      e.stopPropagation();
+      return false;
+    }
+    
+    // Ở đây sự kiện bắt nguồn từ menu
+    const isAtTop = e.target.scrollTop <= 0;
+    const isAtBottom = e.target.scrollHeight - e.target.scrollTop <= e.target.clientHeight;
+    
+    // Nếu menu đã ở đầu và đang cuộn lên hoặc đã ở cuối và đang cuộn xuống
+    if ((isAtTop && e.deltaY < 0) || (isAtBottom && e.deltaY > 0)) {
+      e.preventDefault();
+      e.stopPropagation();
+      return false;
+    }
+    
+    // Cho phép cuộn trong menu
+    e.stopPropagation();
+  }
+  
   // Mở sidebar
   function openSidebar() {
+    // Lưu vị trí cuộn hiện tại trước khi khóa
+    scrollPosition = window.pageYOffset || document.documentElement.scrollTop;
+    
     sidebarMenu.classList.add('active');
     sidebarOverlay.classList.add('active');
     
@@ -51,8 +84,13 @@ document.addEventListener('DOMContentLoaded', function() {
     sidebarMenu.setAttribute('aria-hidden', 'false');
     openSidebarBtn.setAttribute('aria-expanded', 'true');
     
-    // Ngăn cuộn trang khi sidebar mở
-    document.body.style.overflow = 'hidden';
+    // Sử dụng ScrollLock utility thay vì code cũ
+    if (window.ScrollLock) {
+      window.ScrollLock.lock(sidebarMenu);
+    } else {
+      // Fallback nếu ScrollLock chưa được tải
+      document.body.style.overflow = 'hidden';
+    }
     
     // Thông báo cho trình đọc màn hình
     announceToScreenReader('Menu đã mở');
@@ -62,14 +100,7 @@ document.addEventListener('DOMContentLoaded', function() {
       closeSidebarBtn.focus();
     }, 100);
     
-    // Xử lý đặc biệt cho iOS
-    if (isIOS) {
-      // Ngăn chặn scroll trên iOS khi sidebar mở
-      document.body.style.position = 'fixed';
-      document.body.style.width = '100%';
-    }
-    
-    // Quản lý focus trap để giữ focus trong sidebar
+    // Thiết lập focus trap
     setupFocusTrap();
   }
   
@@ -82,20 +113,19 @@ document.addEventListener('DOMContentLoaded', function() {
     sidebarMenu.setAttribute('aria-hidden', 'true');
     openSidebarBtn.setAttribute('aria-expanded', 'false');
     
-    // Cho phép cuộn trang khi sidebar đóng
-    document.body.style.overflow = '';
+    // Sử dụng ScrollLock utility để mở khóa cuộn
+    if (window.ScrollLock) {
+      window.ScrollLock.unlock();
+    } else {
+      // Fallback nếu ScrollLock chưa được tải
+      document.body.style.overflow = '';
+    }
     
     // Thông báo cho trình đọc màn hình
     announceToScreenReader('Menu đã đóng');
     
     // Di chuyển focus về nút mở menu
     openSidebarBtn.focus();
-    
-    // Xử lý đặc biệt cho iOS
-    if (isIOS) {
-      document.body.style.position = '';
-      document.body.style.width = '';
-    }
     
     // Xóa focus trap
     removeFocusTrap();
@@ -146,6 +176,12 @@ document.addEventListener('DOMContentLoaded', function() {
       firstFocusableElement.focus();
     }
   }
+  
+  // Ngăn cuộn bên trong sidebar menu lan sang body
+  sidebarMenu.addEventListener('wheel', function(e) {
+    // Ngăn sự kiện lan ra document
+    e.stopPropagation();
+  }, { passive: false });
   
   // Sự kiện click cho các nút và overlay
   openSidebarBtn.addEventListener('click', openSidebar);

@@ -2,7 +2,11 @@
  * Các helper functions cho Handlebars
  */
 
+import paginationHelpers from './pagination.helpers'; // Import pagination helpers
+
 export const helpers = {
+    ...paginationHelpers, // Spread pagination helpers here
+
     /**
      * So sánh hai giá trị bằng nhau
      * @param a - Giá trị thứ nhất
@@ -36,6 +40,15 @@ export const helpers = {
      */
     now: function () {
         return new Date();
+    },
+
+    /**
+     * Chuyển đổi một đối tượng thành chuỗi JSON
+     * @param context - Đối tượng cần chuyển đổi
+     * @returns Chuỗi JSON
+     */
+    json: function (context: any) {
+        return JSON.stringify(context);
     },
 
     /**

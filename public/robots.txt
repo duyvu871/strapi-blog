@@ -1,0 +1,3 @@
+User-agent: *
+Allow: /
+Sitemap: https://regisna.site/sitemap.xml

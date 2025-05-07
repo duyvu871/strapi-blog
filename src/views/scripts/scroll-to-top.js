@@ -1,11 +1,11 @@
 /**
- * Scroll to top functionality with enhanced smooth scrolling
- * Fixed iOS scrolling issues with improved accessibility
+ * Scroll to top functionality with vanilla JavaScript
+ * Improved accessibility and performance
  */
 document.addEventListener('DOMContentLoaded', function() {
   let scrollToTopBtn = document.getElementById('scrollToTopBtn');
   
-  // Nếu không tìm thấy nút, tạo nút mới và thêm vào DOM
+  // If button doesn't exist, create it
   if (!scrollToTopBtn) {
     scrollToTopBtn = document.createElement('button');
     scrollToTopBtn.id = 'scrollToTopBtn';
@@ -16,57 +16,10 @@ document.addEventListener('DOMContentLoaded', function() {
     document.body.appendChild(scrollToTopBtn);
   }
   
-  // Phát hiện thiết bị iOS
-  const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
+  // Detect mobile devices
   const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
   
-  // Khởi tạo Lenis cho smooth scrolling nếu thư viện đã được tải
-  let lenis;
-  if (window.Lenis) {
-    lenis = new Lenis({
-      duration: isIOS ? 0.8 : 1.2, // Giảm thời gian duration trên iOS
-      easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
-      direction: 'vertical',
-      gestureDirection: 'vertical',
-      smooth: !isIOS, // Tắt smooth trên iOS nếu gây vấn đề
-      smoothTouch: isIOS ? false : true, // Tắt smoothTouch trên iOS
-      touchMultiplier: isIOS ? 1.5 : 2, // Giảm touchMultiplier trên iOS
-      wheelMultiplier: isIOS ? 0.8 : 1, // Thêm wheelMultiplier cho iOS
-      normalizeWheel: true
-    });
-    
-    // Kết nối Lenis với GSAP để hoạt động mượt mà với ScrollTrigger (nếu có)
-    if (window.gsap && window.ScrollTrigger) {
-      gsap.ticker.add((time) => {
-        lenis.raf(time * 1000);
-      });
-      
-      gsap.ticker.lagSmoothing(0);
-    } else {
-      // Fallback nếu không có GSAP
-      function raf(time) {
-        lenis.raf(time);
-        requestAnimationFrame(raf);
-      }
-      requestAnimationFrame(raf);
-    }
-    
-    // Thêm xử lý đặc biệt cho iOS
-    if (isIOS) {
-      // Cố định vấn đề scroll bounce trên iOS
-      document.body.style.overscrollBehavior = 'none';
-      document.documentElement.style.overscrollBehavior = 'none';
-      
-      // Thêm sự kiện touch để ngăn chặn các hành vi mặc định trên iOS
-      document.addEventListener('touchmove', function(e) {
-        if (e.scale !== 1) {
-          e.preventDefault();
-        }
-      }, { passive: false });
-    }
-  }
-  
-  // Thông báo cho người dùng đang sử dụng trình đọc màn hình
+  // Accessibility announcement element
   const announceToScreenReader = (message) => {
     let announcement = document.getElementById('a11y-announcement');
     
@@ -82,7 +35,7 @@ document.addEventListener('DOMContentLoaded', function() {
     announcement.textContent = message;
   };
   
-  // Hiển thị nút khi người dùng cuộn xuống 300px từ đầu trang
+  // Show/hide button based on scroll position
   const showHideButton = function() {
     const isVisible = scrollToTopBtn.classList.contains('visible');
     
@@ -99,29 +52,28 @@ document.addEventListener('DOMContentLoaded', function() {
     }
   };
   
-  // Sử dụng cả scroll và touchmove để phát hiện cuộn trên các thiết bị cảm ứng
+  // Use passive event listeners for better performance
   window.addEventListener('scroll', showHideButton, { passive: true });
   
-  // Thêm touchmove listener cho iOS
-  if (isIOS || isMobile) {
+  // Add touchmove listener for mobile devices
+  if (isMobile) {
     document.addEventListener('touchmove', showHideButton, { passive: true });
   }
   
-  // Phát hiện sự kiện cuộn thông qua bàn phím để hiển thị nút
+  // Detect keyboard scrolling
   window.addEventListener('keydown', function(e) {
     if (e.key === 'ArrowDown' || e.key === 'PageDown' || e.key === 'End' || e.key === 'Space') {
-      // Kiểm tra scroll position sau một khoảng thời gian ngắn
       setTimeout(showHideButton, 100);
     }
   });
   
-  // Cuộn lên đầu trang khi nút được nhấn
+  // Scroll to top function
   scrollToTopBtn.addEventListener('click', function(e) {
     e.preventDefault();
     scrollToTop();
   });
   
-  // Hỗ trợ phím Enter/Space khi focus vào nút
+  // Keyboard accessibility
   scrollToTopBtn.addEventListener('keydown', function(e) {
     if (e.key === 'Enter' || e.key === ' ' || e.key === 'Space') {
       e.preventDefault();
@@ -129,46 +81,49 @@ document.addEventListener('DOMContentLoaded', function() {
     }
   });
   
+  // Scroll to top with vanilla JS
   function scrollToTop() {
     announceToScreenReader('Đang cuộn lên đầu trang');
     
-    // Sử dụng Lenis nếu có
-    if (lenis) {
-      lenis.scrollTo(0, { 
-        duration: isIOS ? 0.8 : 1.2, // Giảm thời gian duration trên iOS
-        force: isIOS // Thêm force cho iOS
-      });
-    } else if ('scrollBehavior' in document.documentElement.style && !isIOS) {
-      // Sử dụng native smooth scrolling cho các trình duyệt hiện đại
-      // Tránh sử dụng scrollBehavior: 'smooth' trên iOS vì có thể gây lỗi
+    // Check if native smooth scrolling is supported
+    if ('scrollBehavior' in document.documentElement.style) {
       window.scrollTo({
         top: 0,
         behavior: 'smooth'
       });
     } else {
-      // Fallback cho các trình duyệt cũ hoặc iOS với hiệu ứng mô phỏng
-      const scrollStep = isIOS ? 4 : 8; // Tăng tốc độ cuộn trên iOS
-      const scrollToTopAnimation = function() {
-        const c = document.documentElement.scrollTop || document.body.scrollTop;
-        if (c > 0) {
-          window.requestAnimationFrame(scrollToTopAnimation);
-          window.scrollTo(0, c - c / scrollStep);
+      // Fallback smooth scrolling for browsers that don't support scrollBehavior
+      const duration = 500; // ms
+      const startPos = window.pageYOffset;
+      const startTime = performance.now();
+      
+      function step(currentTime) {
+        const elapsed = currentTime - startTime;
+        // Easing function: easeInOutQuad
+        const position = elapsed < duration 
+          ? startPos * (1 - (elapsed / duration) * (elapsed / duration))
+          : 0;
+        
+        window.scrollTo(0, position);
+        
+        if (elapsed < duration) {
+          window.requestAnimationFrame(step);
         }
-      };
-      scrollToTopAnimation();
+      }
+      
+      window.requestAnimationFrame(step);
     }
   }
   
-  // Thêm sự kiện cuộn nhanh bằng phím nóng
+  // Alt + Home keyboard shortcut
   document.addEventListener('keydown', function(e) {
-    // Alt + Home để cuộn lên đầu trang
     if (e.altKey && (e.key === 'Home')) {
       e.preventDefault();
       scrollToTop();
     }
   });
   
-  // Khởi tạo trạng thái ban đầu
+  // Initialize button state
   scrollToTopBtn.setAttribute('aria-hidden', 'true');
   showHideButton();
 });

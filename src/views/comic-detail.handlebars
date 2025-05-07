@@ -1,86 +1,198 @@
 {{!--
 Single Comic Page - Shows details of a specific comic series
 --}}
-
 <div class="comic-detail-page">
-  {{#if comic}}
+    {{#if comic}}
     <section class="pt-8 pb-12 bg-gradient-to-b from-purple-100 to-white">
-      <div class="container mx-auto px-4">
-        <div class="flex flex-col md:flex-row gap-8">
-          {{#if comic.thumbnail}}
-            <div class="w-full md:w-1/3 lg:w-1/4">
-              <div class="aspect-[3/4] rounded-xl overflow-hidden shadow-xl">
-                <img 
-                  src="{{comic.thumbnail.formats.medium.url}}" 
-                  alt="{{comic.title}} cover" 
-                  class="w-full h-full object-cover"
-                >
-              </div>
-            </div>
-          {{else}}
-            <div class="w-full md:w-1/3 lg:w-1/4">
-              <div class="aspect-[3/4] rounded-xl overflow-hidden shadow-xl bg-gradient-to-br from-purple-500 to-purple-800"></div>
-            </div>
-          {{/if}}
-          
-          <div class="w-full md:w-2/3 lg:w-3/4">
-            <h1 class="text-3xl md:text-5xl font-tiempos-headline italic text-purple-600 mb-4">{{comic.title}}</h1>
-            
-            {{#if comic.publishedAt}}
-              <div class="mb-4 text-gray-500">
-                <span>Xuất bản: {{formatDate comic.publishedAt "DD/MM/YYYY"}}</span>
-              </div>
-            {{/if}}
-            
-            {{#if comic.description}}
-              <div class="prose prose-lg max-w-none mb-6">
-                <p>{{comic.description}}</p>
-              </div>
-            {{/if}}
-            
-            {{#if comic.labelThumbnail}}
-              <div class="mt-6">
-                <div class="text-xl font-medium mb-2">Nhãn</div>
-                <div class="flex gap-2">
-                  <img 
-                    src="{{comic.labelThumbnail.formats.thumbnail.url}}" 
-                    alt="{{comic.title}} label" 
-                    class="h-10 rounded-md"
-                  >
+        <div class="my-12 sm:my-28"></div>
+
+        <div class="container mx-auto px-4">
+            <div class="flex flex-col md:flex-row gap-8">
+
+                {{#if comic.thumbnail}}
+                <div class="w-full md:w-1/3 lg:w-1/4">
+                    <div class="aspect-[3/4] rounded-xl overflow-hidden shadow-xl relative">
+                        <img src="{{comic.thumbnail.formats.medium.url}}" alt="{{comic.title}} cover"
+                            aria-label="Comic series {{comic.title}}" class="w-full h-full object-cover">
+                        {{#if comic.labelThumbnail}}
+                        <div class="mt-6 absolute bottom-2 right-2 bg-purple-600 text-white text-xs font-bold px-2 py-1 rounded-xl">
+                            <div class="flex gap-2">
+                                <img src="{{comic.labelThumbnail.formats.thumbnail.url}}" alt="{{comic.title}} label"
+                                    class="h-10 rounded-md">
+                            </div>
+                        </div>
+                        {{/if}}
+                    </div>
                 </div>
-              </div>
-            {{/if}}
-          </div>
+                {{else}}
+                <div class="w-full md:w-1/3 lg:w-1/4">
+                    <div
+                        class="aspect-[3/4] rounded-xl overflow-hidden shadow-xl bg-gradient-to-br from-purple-500 to-purple-800">
+                    </div>
+                </div>
+                {{/if}}
+
+                <div class="w-full md:w-2/3 lg:w-3/4">
+                    <h1 class="text-3xl md:text-5xl font-tiempos-headline italic text-purple-600 mb-4  font-light typo-title-font">{{comic.title}}
+                    </h1>
+
+                    {{#if comic.publishedAt}}
+                    <div class="mb-4 text-gray-500">
+                        <span>Xuất bản: {{formatDate comic.publishedAt "DD/MM/YYYY"}}</span>
+                    </div>
+                    {{/if}}
+
+                    {{#if comic.description}}
+                    <div class="prose prose-lg max-w-none mb-6 text-gray-700">
+                        <p>{{comic.description}}</p>
+                    </div>
+                    {{/if}}
+                </div>
+            </div>
         </div>
-      </div>
     </section>
 
     {{#if comic.comic_episodes}}
-      <section class="py-12">
+    <section class="py-12">
         <div class="container mx-auto px-4">
-          <h2 class="text-3xl font-tiempos-headline text-purple-600 mb-8">Các tập</h2>
-          
-          <div class="space-y-6">
-            {{#each comic.comic_episodes}}
-              <div class="bg-white rounded-xl shadow-md overflow-hidden hover:shadow-lg transition-shadow">
-                <div class="p-6">
-                  <h3 class="text-xl font-medium mb-4">Tập {{@index}}</h3>
-                  <div class="prose max-w-none">
-                    {{{this.content}}}
-                  </div>
+            <div class="flex flex-col md:flex-row gap-8">
+                <!-- Episodes sidebar -->
+                <div class="w-full md:w-1/4 lg:w-1/5">
+                    <h2 class="text-xl font-medium mb-4 text-gray-600">Danh sách tập</h2>   
+                    <div class="bg-white rounded-lg shadow-md overflow-hidden">
+                        <ul class="divide-y divide-gray-200">
+                            {{#each comic.comic_episodes}}
+                            <li>
+                                <a href="/comic/{{../comic.slug}}?episode_id={{@index}}"
+                                    class="episode-list-item block px-4 text-purple-600 py-3 hover:bg-purple-50 {{#if this.active}}bg-purple-100{{/if}}">
+                                    <span class="font-medium">{{#if this.title}}{{this.title}}{{else}}Tập
+                                        {{@index}}{{/if}}</span>
+                                </a>
+                            </li>
+                            {{/each}}
+                        </ul>
+                    </div>
                 </div>
-              </div>
-            {{/each}}
-          </div>
+
+                <!-- Episode content -->
+                <div class="w-full md:w-3/4 lg:w-4/5">
+                    {{#if currentEpisode}}
+                    <div class="bg-white rounded-xl shadow-md overflow-hidden">
+                        <div class="p-6">
+                            <h3 class="text-2xl font-medium text-purple-600 mb-6">
+                                {{#if currentEpisode.title}}
+                                {{currentEpisode.title}}
+                                {{else}}
+                                Tập {{currentEpisodeIndex}}
+                                {{/if}}
+                            </h3>
+                            <div class="h-[400px] sm:h-[600px] overflow-hidden relative">
+                                <img src="{{currentEpisode.page_thumbnail_url}}" alt="{{currentEpisode.title}} cover"
+                                    aria-label="Comic series {{comic.title}}" class="w-full h-full object-contain">
+                                {{#if currentEpisode.labelThumbnail}}
+                                
+                                <div class="mt-6 absolute bottom-2 right-2 bg-purple-600 text-white text-xs font-bold px-2 py-1 rounded-xl">
+                                    <div class="flex gap-2">
+                                        <img src="{{currentEpisode.labelThumbnail.formats.thumbnail.url}}" alt="{{currentEpisode.title}} label"
+                                            class="h-10 rounded-md">
+                                    </div>
+                                </div>
+                                {{/if}}
+                            </div>
+                            <div class="prose max-w-none episode-content">
+                                {{{currentEpisode.content}}}
+                            </div>
+                        </div>
+                    </div>
+                    {{else}}
+                    <div class="bg-white rounded-xl shadow-md p-8 text-center">
+                        <h3 class="text-xl text-gray-500">Chọn một tập từ danh sách để xem nội dung</h3>
+                    </div>
+                    {{/if}}
+
+                    <!-- Navigation between episodes -->
+                    {{#if currentEpisode}}
+                    <div class="mt-6 flex justify-between">
+                        {{#if previousEpisode}}
+                        <a href="/comic/{{comic.slug}}?episode_id={{previousEpisode}}"
+                            class="inline-flex items-center px-4 py-2 bg-purple-100 text-gray-700 hover:bg-purple-200 rounded-md transition-colors">
+                            <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"
+                                xmlns="http://www.w3.org/2000/svg">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M15 19l-7-7 7-7"></path>
+                            </svg>
+                            Tập trước
+                        </a>
+                        {{else}}
+                        <span></span>
+                        {{/if}}
+
+                        {{#if nextEpisode}}
+                        <a href="/comic/{{comic.slug}}?episode_id={{nextEpisode}}"
+                            class="inline-flex items-center px-4 py-2 bg-purple-100 text-gray-700 hover:bg-purple-200 rounded-md transition-colors">
+                            Tập tiếp
+                            <svg class="w-4 h-4 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"
+                                xmlns="http://www.w3.org/2000/svg">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7">
+                                </path>
+                            </svg>
+                        </a>
+                        {{else}}
+                        <span></span>
+                        {{/if}}
+                    </div>
+                    {{/if}}
+                </div>
+            </div>
         </div>
-      </section>
-    {{/if}}
-  {{else}}
-    <div class="container mx-auto px-4 py-20 text-center">
-      <h1 class="text-3xl text-gray-600 mb-4">Không tìm thấy comic series</h1>
-      <a href="/comics" aria-label="Chuyển về comics" class="inline-block bg-purple-600 hover:bg-purple-700 text-white px-6 py-2 rounded-md transition-colors mt-4">
-        Quay lại danh sách comic
-      </a>
+    </section>
+    {{else}}
+    <div class="container mx-auto px-4 py-12 text-center">
+        <p class="text-xl text-gray-600">Không có tập nào cho comic series này.</p>
     </div>
-  {{/if}}
+    {{/if}}
+
+    <!-- Latest Articles Section -->
+    {{#if latestArticles}}
+    <section class="py-12 bg-gray-50">
+        <div class="container mx-auto px-4">
+            <h2 class="text-2xl md:text-3xl font-tiempos-headline text-purple-600 mb-8">Bài viết mới nhất</h2>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+                {{#each latestArticles}}
+                 {{> components/article-card/article-card 
+                    title=this.title 
+                    excerpt=this.description 
+                    image=this.thumbnail.url 
+                    imageAlt=this.thumbnail.alternativeText
+                    type=this.type
+                    category=this.categories.name
+                    publishDate=(formatDate this.publishedAt)
+                    url=(concat "/article/" this.slug)
+                }}
+                {{/each}}
+            </div>
+
+            <div class="text-center mt-8">
+                <a href="/"
+                    class="inline-flex items-center px-5 py-2 bg-purple-600 hover:bg-purple-700 text-white rounded-md transition-colors">
+                    Xem tất cả bài viết
+                    <svg class="w-4 h-4 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"
+                        xmlns="http://www.w3.org/2000/svg">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
+                    </svg>
+                </a>
+            </div>
+        </div>
+    </section>
+    {{/if}}
+    {{else}}
+    <div class="container mx-auto px-4 py-20 text-center">
+        <h1 class="text-3xl text-gray-600 mb-4">Không tìm thấy comic series</h1>
+        <a href="/comics" aria-label="Chuyển về comics"
+            class="inline-block bg-purple-600 hover:bg-purple-700 text-white px-6 py-2 rounded-md transition-colors mt-4">
+            Quay lại danh sách comic
+        </a>
+    </div>
+    {{/if}}
 </div>

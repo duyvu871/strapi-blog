@@ -40,6 +40,12 @@ export interface ArticlesConnectionResponse {
                 type: string
                 title: string
             }>;
+            pageInfo: {
+               page: number;
+                pageCount: number;
+                pageSize: number;
+                total: number;
+            };
         };
     }
 }

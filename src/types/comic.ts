@@ -16,17 +16,22 @@ export interface ComicSeries {
     publishedAt: string;
     slug: string;
     title: string;
-}
-
-// These interfaces will be used for the detailed comic page (/comic/:slug)
-export interface ComicSeriesDetail extends ComicSeries {
-    comic_episodes: ComicEpisode[];
-    labelThumbnail: Thumbnail;
-    thumbnail: Thumbnail;
+    thumbnail?: Thumbnail;
+    comic_episodes?: ComicEpisode[];
+    labelThumbnail?: Thumbnail;
 }
 
 export interface ComicEpisode {
+    id: number;
+    title?: string;
     content: string;
+    description?: string;
+    subTitle?: string;
+    type?: string;
+    createdAt?: string;
+    pages?: {
+        formats: Formats;
+    }[];
 }
 
 export interface Thumbnail {
