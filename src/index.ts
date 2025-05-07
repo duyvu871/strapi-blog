@@ -434,7 +434,7 @@ app.get('/comic/:slug', async (req, res) => {
 
         if (comic.comic_episodes && comic.comic_episodes.length > 0) {
             // Nếu có episodeId, tìm episode tương ứng
-            if (episodeId && episodeId >= 0 && episodeId < comic.comic_episodes.length) {
+            if (episodeId >= 0 && episodeId < comic.comic_episodes.length) {
                 currentEpisodeIndex = episodeId;
                 if (currentEpisodeIndex > -1) {
                     currentEpisode = comic.comic_episodes[currentEpisodeIndex];
@@ -463,8 +463,6 @@ app.get('/comic/:slug', async (req, res) => {
                 
                 currentEpisode = comic.comic_episodes[0];
                 currentEpisodeIndex = 0;
-                // @ts-ignore
-                comic.comic_episodes[0].active = true; // Đánh dấu episode đầu tiên là active
                 if (comic.comic_episodes.length > 1) {
                     nextEpisode = 0;
                 }
@@ -493,6 +491,8 @@ app.get('/comic/:slug', async (req, res) => {
         //@ts-ignore
         currentEpisode.page_thumbnail_url = currentEpisode?.pages?.[0]?.formats?.medium?.url || '/assets/images/og-image.jpg';
 
+        // console.log(comic.comic_episodes);
+        
 
         // Lấy danh mục để hiển thị trên thanh navigation
         const categories = await categoryService.getAllCategories();
