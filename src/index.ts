@@ -307,7 +307,7 @@ app.get('/category/:slug', async (req, res) => {
                 limit: 1
             }
         });
-        const parsedRelatedArticle = relatedArticleData.length > 0 ? articleService.articlesParse(relatedArticleData)[0] : null;
+        const parsedRelatedArticle = relatedArticleData.length > 0 ? articleService.parseRelatedArticles(relatedArticleData)[0] : null;
 
         const host = req.get('host');
         const protocol = req.protocol;
